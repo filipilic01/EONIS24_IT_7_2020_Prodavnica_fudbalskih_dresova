@@ -6,6 +6,7 @@ using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -26,6 +27,7 @@ namespace API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<JerseySizeDto>>> GetJerseySizes()
         {
             var spec = new JerseySizeWithJerseySpecification();
@@ -45,6 +47,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("{jerseySizeId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<JerseySizeDto>> GetJerseySizeById(Guid jerseySizeId)
         {
             var spec = new JerseySizeWithJerseySpecification(jerseySizeId);
@@ -60,6 +63,7 @@ namespace API.Controllers
         [Consumes("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<JerseyDto>> AddJerseySize([FromBody] JerseySizeCreationDto jerseySizePost)
         {
             try
@@ -84,6 +88,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{jerseySizeId}")]
+        [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> DeleteJerseySize(Guid jerseySizeId)
         {
@@ -116,6 +121,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<JerseySizeDto>> UpdateJerseySize([FromBody] JerseySizeUpdateDto jerseySizeUpdate)
         {
             try

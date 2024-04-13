@@ -7,6 +7,7 @@ using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +29,7 @@ namespace API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<AdminDto>>> GetAdmins()
         {
          
@@ -46,6 +48,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("{adminId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<AdminDto>> GetAdminById(Guid adminId)
         {
            
@@ -61,6 +64,8 @@ namespace API.Controllers
         [Consumes("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [AllowAnonymous]
+
         public async Task<ActionResult<AdminDto>> AddAdmin([FromBody] AdminCreationDto adminPost)
         {
             try
@@ -89,7 +94,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{adminId}")]
-
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAdmin(Guid adminId)
         {
             try
@@ -121,6 +126,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<AdminDto>> UpdateAdmin([FromBody] AdminUpdateDto adminUpdate)
         {
             try

@@ -5,6 +5,7 @@ using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +27,7 @@ namespace API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [AllowAnonymous]
         public async Task<ActionResult<Pagination<JerseyDto>>> GetJerseys([FromQuery] JerseySpecParams specParams)
         {
             var spec = new JerseysWithAdminSpecification(specParams);
@@ -44,6 +46,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("{jerseyId}")]
+        [AllowAnonymous]
         public async Task<ActionResult<JerseyDto>> GetJerseyById(Guid jerseyId)
         {
             var spec = new JerseysWithAdminSpecification(jerseyId);
@@ -59,6 +62,7 @@ namespace API.Controllers
         [Consumes("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<JerseyDto>> AddJersey([FromBody] JerseyCreationDto jerseyPost)
         {
             try
@@ -83,7 +87,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{jerseyId}")]
-
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteJersey(Guid jerseyId)
         {
             try
@@ -115,6 +119,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<JerseyDto>> UpdateJersey([FromBody] JerseyUpdateDto jerseyUpdate)
         {
             try

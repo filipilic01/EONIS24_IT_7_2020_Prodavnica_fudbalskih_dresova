@@ -21,6 +21,10 @@
             {
                 return "Unauthorized";
             }
+            else if (statusCode == 403)
+            {
+                return "Forbidden";
+            }
             else if (statusCode == 404)
             {
                 return "Not found";

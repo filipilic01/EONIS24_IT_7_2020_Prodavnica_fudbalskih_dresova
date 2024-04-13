@@ -6,6 +6,7 @@ using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -26,6 +27,7 @@ namespace API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<OrderDto>>> GetOrders()
         {
             var spec = new OrderWithCustomerSpecification();
@@ -45,6 +47,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("{orderId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<OrderDto>> GetOrderById(Guid orderId)
         {
             var spec = new OrderWithCustomerSpecification(orderId);
@@ -60,6 +63,7 @@ namespace API.Controllers
         [Consumes("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "Admin, Customer")]
         public async Task<ActionResult<OrderDto>> AddOrder([FromBody] OrderCreationDto orderPost)
         {
             try
@@ -84,6 +88,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{orderId}")]
+        [Authorize(Roles = "Admin,  Customer")]
 
         public async Task<IActionResult> DeleteOrder(Guid orderId)
         {
@@ -116,6 +121,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "Admin, Customer")]
         public async Task<ActionResult<OrderDto>> UpdateOrder([FromBody] OrderUpdateDto orderUpdate)
         {
             try

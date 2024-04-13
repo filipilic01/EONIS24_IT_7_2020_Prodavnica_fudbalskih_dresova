@@ -4,6 +4,7 @@ using API.Errors;
 using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -24,6 +25,7 @@ namespace API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<CustomerDto>>> GetCustomers()
         {
 
@@ -42,6 +44,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("{customerId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<CustomerDto>> GetCustomerById(Guid customerId)
         {
 
@@ -57,6 +60,7 @@ namespace API.Controllers
         [Consumes("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [AllowAnonymous]
         public async Task<ActionResult<CustomerDto>> AddCustomer([FromBody] CustomerCreationDto customerPost)
         {
             try
@@ -85,6 +89,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{customerId}")]
+        [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> DeleteCustomer(Guid customerId)
         {
@@ -117,6 +122,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "Admin, Customer")]
         public async Task<ActionResult<CustomerDto>> UpdateCustomer([FromBody] CustomerUpdateDto customerUpdate)
         {
             try

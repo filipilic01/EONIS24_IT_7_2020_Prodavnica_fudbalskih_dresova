@@ -5,6 +5,7 @@ using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -25,6 +26,7 @@ namespace API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<OrderItemDto>>> GetOrderItems()
         {
             var spec = new OrderItemWithOrderAndJerseySizeSpecification();
@@ -44,6 +46,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("{orderItemId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<OrderItemDto>> GetOrderItemById(Guid orderItemId)
         {
             var spec = new OrderItemWithOrderAndJerseySizeSpecification(orderItemId);
@@ -59,6 +62,7 @@ namespace API.Controllers
         [Consumes("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "Admin, Customer")]
         public async Task<ActionResult<OrderItemDto>> AddOrderItem([FromBody] OrderItemCreationDto orderItemPost)
         {
             try
@@ -83,6 +87,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{orderItemId}")]
+        [Authorize(Roles = "Admin, Customer")]
 
         public async Task<IActionResult> DeleteOrderItem(Guid orderItemId)
         {
@@ -115,6 +120,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "Admin, Customer")]
         public async Task<ActionResult<OrderItemDto>> UpdateOrderItem([FromBody] OrderItemUpdateDto orderItemUpdate)
         {
             try
@@ -146,6 +152,15 @@ namespace API.Controllers
                 return StatusCode(500, new ApiException(500, "Updating error"));
             }
 
+        }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [Authorize(Roles = "Admin, Customer")]
+        public async Task<ActionResult<List<OrderItemDto>>> GetOrderItemsByOrderId(Guid id)
+        {
+            
         }
     }
 }

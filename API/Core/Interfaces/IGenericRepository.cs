@@ -1,4 +1,5 @@
-﻿using Core.Specifications;
+﻿using Core.Entities;
+using Core.Specifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,8 @@ namespace Core.Interfaces
         bool GetUsername(string username, string flag);
         Task<T> UpdateAsync(T updateRequest, T existingJersey, Func<T, T, T> update);
 
+        Admin GetAdminByUsername(string username);
+        Customer GetCustomerByUsername(string username);
         Task DeleteAsync(Guid id);
         Task<T> AddAsync(T add);
     }

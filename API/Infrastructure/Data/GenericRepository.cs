@@ -4,6 +4,7 @@ using Core.Specifications;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Formats.Asn1;
 using System.Linq;
 using System.Security;
 using System.Text;
@@ -98,6 +99,15 @@ namespace Infrastructure.Data
             
         }
 
+        public Admin GetAdminByUsername(string username)
+        {
+           return _context.Admins.FirstOrDefault(a => a.AdminUserName == username);
+
+        }
+        public Customer GetCustomerByUsername(string username)
+        {
+            return _context.Customers.FirstOrDefault(a => a.CustomerUserName == username);
+        }
         private IQueryable<T> ApplySpecification(ISpecification<T> specification)
         {
             return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), specification);
