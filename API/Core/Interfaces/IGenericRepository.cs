@@ -18,9 +18,12 @@ namespace Core.Interfaces
 
         Task<T> GetEntityWithSpec(ISpecification<T> spec);
 
+        Task<List<OrderItem>> GetOrderItemsByOrderId(Guid id);
+        Task<List<Order>> GetOrdersByCustomerId(Guid id);
         Task<int> CountAsync(ISpecification<T> spec);
 
         bool GetUsername(string username, string flag);
+        bool GetEmail(string email, string flag);
         Task<T> UpdateAsync(T updateRequest, T existingJersey, Func<T, T, T> update);
 
         Admin GetAdminByUsername(string username);

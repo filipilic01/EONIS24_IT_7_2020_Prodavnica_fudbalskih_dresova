@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.Entities
 {
+   
     public class OrderItem : BaseEntity
     {
         [Key]

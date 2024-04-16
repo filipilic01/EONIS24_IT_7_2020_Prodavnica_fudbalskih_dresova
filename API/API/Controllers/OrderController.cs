@@ -1,5 +1,6 @@
 ﻿using API.Dtos.Jerseys;
 using API.Dtos.JerseySizes;
+using API.Dtos.OrderItems;
 using API.Dtos.Orders;
 using API.Errors;
 using AutoMapper;
@@ -154,6 +155,23 @@ namespace API.Controllers
                 return StatusCode(500, new ApiException(500, "Updating error"));
             }
 
+        }
+
+        [HttpGet("Customer/{customerId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+
+        [Authorize(Roles = "Admin, Customer")]
+        public async Task<ActionResult<List<OrderDto>>> GetOrdersByCustomerId(Guid customerId)
+        {
+            var orders = await _repository.GetOrdersByCustomerId(customerId);
+
+            if (orders.Count==0)
+                return NotFound(new ApiResponse(404, "Customer with ID " + customerId + " not found"));
+
+            var ordersDto = _mapper.Map<IEnumerable<Order>, IEnumerable<OrderDto>>(orders);
+            return Ok(ordersDto.ToList());
         }
     }
 }

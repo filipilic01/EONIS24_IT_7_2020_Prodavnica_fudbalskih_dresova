@@ -70,9 +70,12 @@ namespace API.Controllers
         {
             try
             {
-                var existingAdmin = _repository.GetUsername(adminPost.AdminUserName, "Admin");
-                if (existingAdmin.Equals(true))
+                var existingAdminUsername = _repository.GetUsername(adminPost.AdminUserName, "Admin");
+                if (existingAdminUsername.Equals(true))
                     return BadRequest(new ApiResponse(400, "Username " + adminPost.AdminUserName+ " already exixsts!"));
+                var existingAdminEmail = _repository.GetEmail(adminPost.AdminEmail, "Admin");
+                if (existingAdminEmail.Equals(true))
+                    return BadRequest(new ApiResponse(400, "Email " + adminPost.AdminEmail + " already exixsts!"));
                 Admin adminEntity = _mapper.Map<Admin>(adminPost);
                 adminEntity.AdminId = Guid.NewGuid();
                 adminEntity.AdminPassword = BCrypt.Net.BCrypt.HashPassword(adminPost.AdminPassword);
@@ -140,7 +143,12 @@ namespace API.Controllers
                 }
 
                 Admin admin = _mapper.Map<Admin>(adminUpdate);
-
+                var existingAdminUsername = _repository.GetUsername(admin.AdminUserName, "Admin");
+                if (existingAdminUsername.Equals(true))
+                    return BadRequest(new ApiResponse(400, "Username " + admin.AdminUserName + " already exixsts!"));
+                var existingAdminEmail = _repository.GetEmail(admin.AdminEmail, "Admin");
+                if (existingAdminEmail.Equals(true))
+                    return BadRequest(new ApiResponse(400, "Email " + admin.AdminEmail + " already exixsts!"));
                 var updateJersey = await _repository.UpdateAsync(admin, adminEntity, (existingAdmin, newAdmin) =>
                 {
                     existingAdmin.AdminId = newAdmin.AdminId;

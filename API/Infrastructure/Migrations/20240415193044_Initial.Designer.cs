@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240411155028_Init")]
-    partial class Init
+    [Migration("20240415193044_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -269,7 +269,10 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderItems", null, t =>
+                        {
+                            t.HasTrigger("Triger1");
+                        });
                 });
 
             modelBuilder.Entity("Core.Entities.Jersey", b =>

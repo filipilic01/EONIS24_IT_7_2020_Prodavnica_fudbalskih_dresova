@@ -266,7 +266,10 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderItems", null, t =>
+                        {
+                            t.HasTrigger("Triger1");
+                        });
                 });
 
             modelBuilder.Entity("Core.Entities.Jersey", b =>

@@ -1,5 +1,6 @@
 ﻿using API.Dtos.Admins;
 using API.Dtos.Customers;
+using API.Dtos.OrderItems;
 using API.Errors;
 using AutoMapper;
 using Core.Entities;
@@ -65,9 +66,12 @@ namespace API.Controllers
         {
             try
             {
-                var existingCustomer = _repository.GetUsername(customerPost.CustomerUserName, "Customer");
-                if (existingCustomer.Equals(true))
+                var existingCustomerUsername = _repository.GetUsername(customerPost.CustomerUserName, "Customer");
+                if (existingCustomerUsername.Equals(true))
                     return BadRequest(new ApiResponse(400, "Username " + customerPost.CustomerUserName + " already exixsts!"));
+                var existingCustomerEmail = _repository.GetEmail(customerPost.CustomerEmail, "Customer");
+                if (existingCustomerEmail.Equals(true))
+                    return BadRequest(new ApiResponse(400, "Email " + customerPost.CustomerEmail + " already exixsts!"));
                 Customer customerEntity = _mapper.Map<Customer>(customerPost);
                 customerEntity.CustomerId = Guid.NewGuid();
                 customerEntity.CustomerPassword = BCrypt.Net.BCrypt.HashPassword(customerPost.CustomerPassword);
@@ -136,7 +140,12 @@ namespace API.Controllers
                 }
 
                 Customer customer = _mapper.Map<Customer>(customerUpdate);
-
+                var existingCustomerUsername = _repository.GetUsername(customer.CustomerUserName, "Customer");
+                if (existingCustomerUsername.Equals(true))
+                    return BadRequest(new ApiResponse(400, "Username " + customer.CustomerUserName + " already exixsts!"));
+                var existingCustomerEmail = _repository.GetEmail(customer.CustomerEmail, "Customer");
+                if (existingCustomerEmail.Equals(true))
+                    return BadRequest(new ApiResponse(400, "Email " + customer.CustomerEmail + " already exixsts!"));
                 var updateJersey = await _repository.UpdateAsync(customer, customerEntity, (existingCustomer, newCustomer) =>
                 {
                     existingCustomer.CustomerId = newCustomer.CustomerId;
@@ -160,6 +169,8 @@ namespace API.Controllers
             }
 
         }
+
+      
 
     }
 }

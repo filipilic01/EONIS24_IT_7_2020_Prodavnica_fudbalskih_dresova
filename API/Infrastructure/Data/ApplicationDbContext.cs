@@ -75,7 +75,12 @@ namespace Infrastructure.Data
                 .HasOne(oi => oi.OrderItem)
                 .WithOne(s => s.JerseySize)
                 .HasForeignKey<OrderItem>(oi => oi.JerseySizeId);
-                
+
+            modelBuilder.Entity<OrderItem>(entry =>
+            {
+                entry.ToTable("OrderItems", tb => tb.HasTrigger("Triger1"));
+            });
+
 
         }
     }

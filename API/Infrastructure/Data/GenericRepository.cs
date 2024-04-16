@@ -36,6 +36,7 @@ namespace Infrastructure.Data
         {
             var enitityForDelete = await _context.Set<T>().FindAsync(id);
             _context.Set<T>().Remove(enitityForDelete);
+            
             await _context.SaveChangesAsync();
         }
 
@@ -99,6 +100,35 @@ namespace Infrastructure.Data
             
         }
 
+        public bool GetEmail(string email, string flag)
+        {
+            if (flag == "Admin")
+            {
+                var admin = _context.Admins.Where(u => u.AdminEmail == email).FirstOrDefault();
+                if (admin == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                var customer = _context.Customers.Where(u => u.CustomerEmail == email).FirstOrDefault();
+                if (customer == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+        }
+
         public Admin GetAdminByUsername(string username)
         {
            return _context.Admins.FirstOrDefault(a => a.AdminUserName == username);
@@ -107,6 +137,17 @@ namespace Infrastructure.Data
         public Customer GetCustomerByUsername(string username)
         {
             return _context.Customers.FirstOrDefault(a => a.CustomerUserName == username);
+        }
+
+        public async Task<List<OrderItem>> GetOrderItemsByOrderId(Guid id)
+        {
+            var items =  await _context.OrderItems.Where(o => o.OrderId == id).AsNoTracking().Include(s => s.JerseySize).ToListAsync();
+            return items;
+        }
+        public async Task<List<Order>> GetOrdersByCustomerId(Guid id)
+        {
+            var orders = await _context.Orders.Where(o => o.CustomerId == id).ToListAsync();
+            return orders;
         }
         private IQueryable<T> ApplySpecification(ISpecification<T> specification)
         {

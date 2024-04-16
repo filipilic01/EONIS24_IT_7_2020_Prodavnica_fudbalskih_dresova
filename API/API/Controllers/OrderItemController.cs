@@ -153,14 +153,22 @@ namespace API.Controllers
             }
 
         }
-
-        [HttpGet]
+        
+        [HttpGet("Order/{orderId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+       
         [Authorize(Roles = "Admin, Customer")]
-        public async Task<ActionResult<List<OrderItemDto>>> GetOrderItemsByOrderId(Guid id)
+        public async Task<ActionResult<List<OrderItemDto>>> GetOrderItemsByOrderId(Guid orderId)
         {
-            
+            var orderItems = await _repository.GetOrderItemsByOrderId(orderId);
+
+            if (orderItems == null)
+                return NotFound(new ApiResponse(404, "Order with ID " + orderId + " not found"));
+
+            var orderItemsDto = _mapper.Map<IEnumerable<OrderItem>, IEnumerable<OrderItemDto>>(orderItems);
+            return Ok(orderItemsDto.ToList());
         }
     }
 }
