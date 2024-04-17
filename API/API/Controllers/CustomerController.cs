@@ -7,6 +7,8 @@ using Core.Entities;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace API.Controllers
 {
@@ -66,21 +68,29 @@ namespace API.Controllers
         {
             try
             {
-                var existingCustomerUsername = _repository.GetUsername(customerPost.CustomerUserName, "Customer");
-                if (existingCustomerUsername.Equals(true))
-                    return BadRequest(new ApiResponse(400, "Username " + customerPost.CustomerUserName + " already exixsts!"));
-                var existingCustomerEmail = _repository.GetEmail(customerPost.CustomerEmail, "Customer");
-                if (existingCustomerEmail.Equals(true))
-                    return BadRequest(new ApiResponse(400, "Email " + customerPost.CustomerEmail + " already exixsts!"));
-                Customer customerEntity = _mapper.Map<Customer>(customerPost);
-                customerEntity.CustomerId = Guid.NewGuid();
-                customerEntity.CustomerPassword = BCrypt.Net.BCrypt.HashPassword(customerPost.CustomerPassword);
+                if (IsValidEmail(customerPost.CustomerEmail))
+                {
+                    var existingCustomerUsername = _repository.GetUsername(customerPost.CustomerUserName, "Customer");
+                    if (existingCustomerUsername.Equals(true))
+                        return BadRequest(new ApiResponse(400, "Username " + customerPost.CustomerUserName + " already exixsts!"));
+                    var existingCustomerEmail = _repository.GetEmail(customerPost.CustomerEmail, "Customer");
+                    if (existingCustomerEmail.Equals(true))
+                        return BadRequest(new ApiResponse(400, "Email " + customerPost.CustomerEmail + " already exixsts!"));
+                    Customer customerEntity = _mapper.Map<Customer>(customerPost);
+                    customerEntity.CustomerId = Guid.NewGuid();
+                    customerEntity.CustomerPassword = BCrypt.Net.BCrypt.HashPassword(customerPost.CustomerPassword);
 
-                await _repository.AddAsync(customerEntity);
+                    await _repository.AddAsync(customerEntity);
 
 
-                return Ok(_mapper.Map<Customer, CustomerDto>(customerEntity));
+                    return Ok(_mapper.Map<Customer, CustomerDto>(customerEntity));
+                }
+                else
+                {
+                    return BadRequest(new ApiResponse(400, "Incorrect email format"));
+                }
             }
+
             catch (Exception ex)
             {
                 return StatusCode(500, new ApiException(500, "Creating error"));
@@ -131,38 +141,46 @@ namespace API.Controllers
         {
             try
             {
-                var customerEntity = await _repository.GetByIdAsync(customerUpdate.CustomerId);
-
-                if (customerEntity == null)
+                if (IsValidEmail(customerUpdate.CustomerEmail))
                 {
+                    var customerEntity = await _repository.GetByIdAsync(customerUpdate.CustomerId);
 
-                    return NotFound(new ApiResponse(404, "Customer with " + customerUpdate.CustomerId + " not found"));
+                    if (customerEntity == null)
+                    {
+
+                        return NotFound(new ApiResponse(404, "Customer with " + customerUpdate.CustomerId + " not found"));
+                    }
+
+                    Customer customer = _mapper.Map<Customer>(customerUpdate);
+                    var existingCustomerUsername = _repository.GetUsername(customer.CustomerUserName, "Customer");
+                    if (existingCustomerUsername.Equals(true))
+                        return BadRequest(new ApiResponse(400, "Username " + customer.CustomerUserName + " already exixsts!"));
+                    var existingCustomerEmail = _repository.GetEmail(customer.CustomerEmail, "Customer");
+                    if (existingCustomerEmail.Equals(true))
+                        return BadRequest(new ApiResponse(400, "Email " + customer.CustomerEmail + " already exixsts!"));
+                    var updateJersey = await _repository.UpdateAsync(customer, customerEntity, (existingCustomer, newCustomer) =>
+                    {
+                        existingCustomer.CustomerId = newCustomer.CustomerId;
+                        existingCustomer.CustomerFirstName = newCustomer.CustomerFirstName;
+                        existingCustomer.CustomerLastName = newCustomer.CustomerLastName;
+                        existingCustomer.CustomerUserName = newCustomer.CustomerUserName;
+                        existingCustomer.CustomerPassword = newCustomer.CustomerPassword;
+                        existingCustomer.CustomerPhoneNumber = newCustomer.CustomerPhoneNumber;
+                        existingCustomer.CustomerEmail = newCustomer.CustomerEmail;
+                        existingCustomer.CustomerAddress = newCustomer.CustomerAddress;
+
+                        return existingCustomer;
+                    });
+
+                    var customer_2 = await _repository.GetByIdAsync(customerUpdate.CustomerId);
+                    return Ok(_mapper.Map<Customer, CustomerDto>(customer_2));
                 }
-
-                Customer customer = _mapper.Map<Customer>(customerUpdate);
-                var existingCustomerUsername = _repository.GetUsername(customer.CustomerUserName, "Customer");
-                if (existingCustomerUsername.Equals(true))
-                    return BadRequest(new ApiResponse(400, "Username " + customer.CustomerUserName + " already exixsts!"));
-                var existingCustomerEmail = _repository.GetEmail(customer.CustomerEmail, "Customer");
-                if (existingCustomerEmail.Equals(true))
-                    return BadRequest(new ApiResponse(400, "Email " + customer.CustomerEmail + " already exixsts!"));
-                var updateJersey = await _repository.UpdateAsync(customer, customerEntity, (existingCustomer, newCustomer) =>
+                else
                 {
-                    existingCustomer.CustomerId = newCustomer.CustomerId;
-                    existingCustomer.CustomerFirstName = newCustomer.CustomerFirstName;
-                    existingCustomer.CustomerLastName = newCustomer.CustomerLastName;
-                    existingCustomer.CustomerUserName = newCustomer.CustomerUserName;
-                    existingCustomer.CustomerPassword = newCustomer.CustomerPassword;
-                    existingCustomer.CustomerPhoneNumber = newCustomer.CustomerPhoneNumber;
-                    existingCustomer.CustomerEmail = newCustomer.CustomerEmail;
-                    existingCustomer.CustomerAddress = newCustomer.CustomerAddress;
-
-                    return existingCustomer;
-                });
-
-                var customer_2 = await _repository.GetByIdAsync(customerUpdate.CustomerId);
-                return Ok(_mapper.Map<Customer, CustomerDto>(customer_2));
+                    return BadRequest(new ApiResponse(400, "Incorrect email format"));
+                }
             }
+             
             catch (Exception ex)
             {
                 return StatusCode(500, new ApiException(500, "Updating error"));
@@ -170,7 +188,50 @@ namespace API.Controllers
 
         }
 
-      
+        private static bool IsValidEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
+
+            try
+            {
+                // Normalize the domain
+                email = Regex.Replace(email, @"(@)(.+)$", DomainMapper,
+                                      RegexOptions.None, TimeSpan.FromMilliseconds(200));
+
+                // Examines the domain part of the email and normalizes it.
+                string DomainMapper(Match match)
+                {
+                    // Use IdnMapping class to convert Unicode domain names.
+                    var idn = new IdnMapping();
+
+                    // Pull out and process domain name (throws ArgumentException on invalid)
+                    string domainName = idn.GetAscii(match.Groups[2].Value);
+
+                    return match.Groups[1].Value + domainName;
+                }
+            }
+            catch (RegexMatchTimeoutException e)
+            {
+                return false;
+            }
+            catch (ArgumentException e)
+            {
+                return false;
+            }
+
+            try
+            {
+                return Regex.IsMatch(email,
+                    @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
+                    RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                return false;
+            }
+        }
+
 
     }
 }

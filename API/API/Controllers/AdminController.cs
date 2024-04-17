@@ -10,6 +10,8 @@ using Core.Specifications;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace API.Controllers
 {
@@ -70,20 +72,27 @@ namespace API.Controllers
         {
             try
             {
-                var existingAdminUsername = _repository.GetUsername(adminPost.AdminUserName, "Admin");
-                if (existingAdminUsername.Equals(true))
-                    return BadRequest(new ApiResponse(400, "Username " + adminPost.AdminUserName+ " already exixsts!"));
-                var existingAdminEmail = _repository.GetEmail(adminPost.AdminEmail, "Admin");
-                if (existingAdminEmail.Equals(true))
-                    return BadRequest(new ApiResponse(400, "Email " + adminPost.AdminEmail + " already exixsts!"));
-                Admin adminEntity = _mapper.Map<Admin>(adminPost);
-                adminEntity.AdminId = Guid.NewGuid();
-                adminEntity.AdminPassword = BCrypt.Net.BCrypt.HashPassword(adminPost.AdminPassword);
+                if (IsValidEmail(adminPost.AdminEmail))
+                {
+                    var existingAdminUsername = _repository.GetUsername(adminPost.AdminUserName, "Admin");
+                    if (existingAdminUsername.Equals(true))
+                        return BadRequest(new ApiResponse(400, "Username " + adminPost.AdminUserName + " already exixsts!"));
+                    var existingAdminEmail = _repository.GetEmail(adminPost.AdminEmail, "Admin");
+                    if (existingAdminEmail.Equals(true))
+                        return BadRequest(new ApiResponse(400, "Email " + adminPost.AdminEmail + " already exixsts!"));
+                    Admin adminEntity = _mapper.Map<Admin>(adminPost);
+                    adminEntity.AdminId = Guid.NewGuid();
+                    adminEntity.AdminPassword = BCrypt.Net.BCrypt.HashPassword(adminPost.AdminPassword);
 
-                await _repository.AddAsync(adminEntity);
-               
-               
-                return Ok(_mapper.Map<Admin, AdminDto>(adminEntity));
+                    await _repository.AddAsync(adminEntity);
+
+
+                    return Ok(_mapper.Map<Admin, AdminDto>(adminEntity));
+                }
+                else
+                {
+                    return BadRequest(new ApiResponse(400, "Incorrect email format"));
+                }
             }
             catch (Exception ex)
             {
@@ -134,37 +143,45 @@ namespace API.Controllers
         {
             try
             {
-                var adminEntity = await _repository.GetByIdAsync(adminUpdate.AdminId);
-
-                if (adminEntity == null)
+                if (IsValidEmail(adminUpdate.AdminEmail))
                 {
+                    var adminEntity = await _repository.GetByIdAsync(adminUpdate.AdminId);
 
-                    return NotFound(new ApiResponse(404, "Admin with " + adminUpdate.AdminId + " not found"));
+                    if (adminEntity == null)
+                    {
+
+                        return NotFound(new ApiResponse(404, "Admin with " + adminUpdate.AdminId + " not found"));
+                    }
+
+                    Admin admin = _mapper.Map<Admin>(adminUpdate);
+                    var existingAdminUsername = _repository.GetUsername(admin.AdminUserName, "Admin");
+                    if (existingAdminUsername.Equals(true))
+                        return BadRequest(new ApiResponse(400, "Username " + admin.AdminUserName + " already exixsts!"));
+                    var existingAdminEmail = _repository.GetEmail(admin.AdminEmail, "Admin");
+                    if (existingAdminEmail.Equals(true))
+                        return BadRequest(new ApiResponse(400, "Email " + admin.AdminEmail + " already exixsts!"));
+                    var updateJersey = await _repository.UpdateAsync(admin, adminEntity, (existingAdmin, newAdmin) =>
+                    {
+                        existingAdmin.AdminId = newAdmin.AdminId;
+                        existingAdmin.AdminFirstName = newAdmin.AdminFirstName;
+                        existingAdmin.AdminLastName = newAdmin.AdminLastName;
+                        existingAdmin.AdminUserName = newAdmin.AdminUserName;
+                        existingAdmin.AdminPassword = newAdmin.AdminPassword;
+                        existingAdmin.AdminPhoneNumber = newAdmin.AdminPhoneNumber;
+                        existingAdmin.AdminEmail = newAdmin.AdminEmail;
+                        existingAdmin.AdminAddress = newAdmin.AdminAddress;
+
+                        return existingAdmin;
+                    });
+
+                    var admin_2 = await _repository.GetByIdAsync(adminUpdate.AdminId);
+                    return Ok(_mapper.Map<Admin, AdminDto>(admin_2));
                 }
-
-                Admin admin = _mapper.Map<Admin>(adminUpdate);
-                var existingAdminUsername = _repository.GetUsername(admin.AdminUserName, "Admin");
-                if (existingAdminUsername.Equals(true))
-                    return BadRequest(new ApiResponse(400, "Username " + admin.AdminUserName + " already exixsts!"));
-                var existingAdminEmail = _repository.GetEmail(admin.AdminEmail, "Admin");
-                if (existingAdminEmail.Equals(true))
-                    return BadRequest(new ApiResponse(400, "Email " + admin.AdminEmail + " already exixsts!"));
-                var updateJersey = await _repository.UpdateAsync(admin, adminEntity, (existingAdmin, newAdmin) =>
+                else
                 {
-                    existingAdmin.AdminId = newAdmin.AdminId;
-                    existingAdmin.AdminFirstName = newAdmin.AdminFirstName;
-                    existingAdmin.AdminLastName = newAdmin.AdminLastName;
-                    existingAdmin.AdminUserName = newAdmin.AdminUserName;
-                    existingAdmin.AdminPassword = newAdmin.AdminPassword;
-                    existingAdmin.AdminPhoneNumber = newAdmin.AdminPhoneNumber;
-                    existingAdmin.AdminEmail = newAdmin.AdminEmail;
-                    existingAdmin.AdminAddress = newAdmin.AdminAddress;
-
-                    return existingAdmin;
-                });
-               
-                var admin_2 = await _repository.GetByIdAsync(adminUpdate.AdminId);
-                return Ok(_mapper.Map<Admin, AdminDto>(admin_2));
+                    return BadRequest(new ApiResponse(400, "Incorrect email format"));
+                }
+                
             }
             catch (Exception ex)
             {
@@ -172,5 +189,50 @@ namespace API.Controllers
             }
 
         }
+
+        private static bool IsValidEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
+
+            try
+            {
+                // Normalize the domain
+                email = Regex.Replace(email, @"(@)(.+)$", DomainMapper,
+                                      RegexOptions.None, TimeSpan.FromMilliseconds(200));
+
+                // Examines the domain part of the email and normalizes it.
+                string DomainMapper(Match match)
+                {
+                    // Use IdnMapping class to convert Unicode domain names.
+                    var idn = new IdnMapping();
+
+                    // Pull out and process domain name (throws ArgumentException on invalid)
+                    string domainName = idn.GetAscii(match.Groups[2].Value);
+
+                    return match.Groups[1].Value + domainName;
+                }
+            }
+            catch (RegexMatchTimeoutException e)
+            {
+                return false;
+            }
+            catch (ArgumentException e)
+            {
+                return false;
+            }
+
+            try
+            {
+                return Regex.IsMatch(email,
+                    @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
+                    RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                return false;
+            }
+        }
+
     }
 }
