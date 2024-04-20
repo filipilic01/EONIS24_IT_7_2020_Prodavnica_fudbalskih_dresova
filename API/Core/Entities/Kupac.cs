@@ -8,40 +8,40 @@ using System.Threading.Tasks;
 
 namespace Core.Entities
 {
-    public class Admin : BaseEntity
+    public class Kupac : BaseEntity
     {
         [Key]
-        public Guid AdminId { get; set; }
+        public Guid KupacId { get; set; }
 
         [Required]
         [StringLength(30)]
-        public string AdminKorisnickoIme { get; set; }
+        public string KupacKorisnickoIme { get; set; }
 
         [Required]
         [StringLength(30)]
-        public string AdminIme { get; set; }
+        public string KupacIme { get; set; }
 
         [Required]
         [StringLength(30)]
-        public string AdminPrezime { get; set; }
+        public string KupacPrezime { get; set; }
 
         [Required]
         [StringLength(60)]
-        public string AdminLozinka { get; set; }
+        public string KupacLozinka { get; set; }
 
         [Required]
         [StringLength(30)]
-        public string AdminEmail { get; set; }
+        public string KupacEmail { get; set; }
 
         [Required]
         [StringLength(30)]
-        public string AdminBrojTelefona { get; set; }
+        public string KupacBrojTelefona { get; set; }
 
         [Required]
         [StringLength(80)]
-        public string AdminAdresa { get; set; }
+        public string KupacAdresa { get; set; }
 
         [JsonIgnore]
-        public ICollection<Dres> Dress { get; set; }
+        public ICollection<Porudzbina> Porudzbinas { get; set; }
     }
 }

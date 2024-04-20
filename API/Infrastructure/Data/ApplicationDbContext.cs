@@ -18,12 +18,12 @@ namespace Infrastructure.Data
             _configuration = configuration;
         }
         public DbSet<Admin> Admins { get; set; }
-        public DbSet<Customer> Customers { get; set; }
-        public DbSet<Jersey> Jerseys { get; set; }
+        public DbSet<Kupac> Kupacs { get; set; }
+        public DbSet<Dres> Dress { get; set; }
 
-        public DbSet<JerseySize> JerseySizes { get; set; }
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<VelicinaDresa> VelicinaDresas { get; set; }
+        public DbSet<Porudzbina> Porudzbinas { get; set; }
+        public DbSet<StavkaPorudzbine> StavkaPorudzbines { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -33,52 +33,52 @@ namespace Infrastructure.Data
                 .IsUnique();
 
             modelBuilder.Entity<Admin>()
-                .HasIndex(e => e.AdminUserName)
+                .HasIndex(e => e.AdminKorisnickoIme)
                 .IsUnique();
 
-            modelBuilder.Entity<Customer>()
-                .HasIndex(e => e.CustomerEmail)
+            modelBuilder.Entity<Kupac>()
+                .HasIndex(e => e.KupacEmail)
                 .IsUnique();
 
-            modelBuilder.Entity<Customer>()
-                .HasIndex(e => e.CustomerUserName)
+            modelBuilder.Entity<Kupac>()
+                .HasIndex(e => e.KupacKorisnickoIme)
                 .IsUnique();
 
-            modelBuilder.Entity<Jersey>()
+            modelBuilder.Entity<Dres>()
                 .ToTable(table =>
                 {
                     table.HasCheckConstraint("CHK_Status", "Status IN ('na stanju', 'nedostupno')");
                 });
 
-            modelBuilder.Entity<Jersey>()
+            modelBuilder.Entity<Dres>()
                 .HasOne(a => a.Admin)
-                .WithMany(j => j.Jerseys)
+                .WithMany(j => j.Dress)
                 .HasForeignKey(a => a.AdminId);
 
-            modelBuilder.Entity<JerseySize>()
-                .HasOne(j => j.Jersey)
-                .WithMany(s => s.JerseySizes)
-                .HasForeignKey(j => j.JerseyId);
+            modelBuilder.Entity<VelicinaDresa>()
+                .HasOne(j => j.Dres)
+                .WithMany(s => s.VelicinaDresas)
+                .HasForeignKey(j => j.DresId);
 
-            modelBuilder.Entity<Order>()
-                .HasOne(c => c.Customer)
-                .WithMany(o => o.Orders)
-                .HasForeignKey(c => c.CustomerId);
+            modelBuilder.Entity<Porudzbina>()
+                .HasOne(c => c.Kupac)
+                .WithMany(o => o.Porudzbinas)
+                .HasForeignKey(c => c.KupacId);
 
-            modelBuilder.Entity<OrderItem>()
-                .HasOne(o => o.Order)
-                .WithMany(i => i.OrderItems)
-                .HasForeignKey(o => o.OrderId);
+            modelBuilder.Entity<StavkaPorudzbine>()
+                .HasOne(o => o.Porudzbina)
+                .WithMany(i => i.StavkaPorudzbines)
+                .HasForeignKey(o => o.PorudzbinaId);
 
 
-            modelBuilder.Entity<JerseySize>()
-                .HasOne(oi => oi.OrderItem)
-                .WithOne(s => s.JerseySize)
-                .HasForeignKey<OrderItem>(oi => oi.JerseySizeId);
+            modelBuilder.Entity<VelicinaDresa>()
+                .HasOne(oi => oi.StavkaPorudzbines)
+                .WithOne(s => s.VelicinaDresa)
+                .HasForeignKey<StavkaPorudzbine>(oi => oi.VelicinaDresaId);
 
-            modelBuilder.Entity<OrderItem>(entry =>
+            modelBuilder.Entity<StavkaPorudzbine>(entry =>
             {
-                entry.ToTable("OrderItems", tb => tb.HasTrigger("Triger1"));
+                entry.ToTable("StavkaPorudzbines", tb => tb.HasTrigger("Triger1"));
             });
 
 

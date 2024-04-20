@@ -1,6 +1,7 @@
-﻿using API.Dtos.Admins;
-using API.Dtos.Jerseys;
-using API.Dtos.JerseySizes;
+﻿using API.Dtos.Admin;
+
+using API.Dtos.Dres;
+using API.Dtos.VelicinaDresa;
 using API.Errors;
 using API.Helpers;
 using AutoMapper;
@@ -57,7 +58,7 @@ namespace API.Controllers
             var admin = await _repository.GetByIdAsync(adminId);
 
             if (admin == null)
-                return NotFound(new ApiResponse(404, "Admin with ID " + adminId + " not found"));
+                return NotFound(new ApiResponse(404, "Admin sa ID " + adminId + " nije pronadjen"));
 
             return _mapper.Map<Admin, AdminDto>(admin);
         }
@@ -74,15 +75,15 @@ namespace API.Controllers
             {
                 if (IsValidEmail(adminPost.AdminEmail))
                 {
-                    var existingAdminUsername = _repository.GetUsername(adminPost.AdminUserName, "Admin");
-                    if (existingAdminUsername.Equals(true))
-                        return BadRequest(new ApiResponse(400, "Username " + adminPost.AdminUserName + " already exixsts!"));
+                    var existingAdminKorisnickoIme = _repository.GetKorisnickoIme(adminPost.AdminKorisnickoIme, "Admin");
+                    if (existingAdminKorisnickoIme.Equals(true))
+                        return BadRequest(new ApiResponse(400, "KorisnickoIme " + adminPost.AdminKorisnickoIme + " vec postoji!"));
                     var existingAdminEmail = _repository.GetEmail(adminPost.AdminEmail, "Admin");
                     if (existingAdminEmail.Equals(true))
-                        return BadRequest(new ApiResponse(400, "Email " + adminPost.AdminEmail + " already exixsts!"));
+                        return BadRequest(new ApiResponse(400, "Email " + adminPost.AdminEmail + " vec postoji!"));
                     Admin adminEntity = _mapper.Map<Admin>(adminPost);
                     adminEntity.AdminId = Guid.NewGuid();
-                    adminEntity.AdminPassword = BCrypt.Net.BCrypt.HashPassword(adminPost.AdminPassword);
+                    adminEntity.AdminLozinka = BCrypt.Net.BCrypt.HashPassword(adminPost.AdminLozinka);
 
                     await _repository.AddAsync(adminEntity);
 
@@ -91,12 +92,12 @@ namespace API.Controllers
                 }
                 else
                 {
-                    return BadRequest(new ApiResponse(400, "Incorrect email format"));
+                    return BadRequest(new ApiResponse(400, "Nepravilan format mejla"));
                 }
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiException(500, "Creating error"));
+                return StatusCode(500, new ApiException(500, "Greska prilikom kreiranja admina"));
             }
 
 
@@ -116,7 +117,7 @@ namespace API.Controllers
                 if (admin == null)
                 {
 
-                    return NotFound(new ApiResponse(404, "Admin with ID " + adminId + " not found"));
+                    return NotFound(new ApiResponse(404, "Admin sa ID " + adminId + "nije pronadjen"));
                 }
 
                 await _repository.DeleteAsync(adminId);
@@ -127,7 +128,7 @@ namespace API.Controllers
             catch (Exception ex)
             {
 
-                return StatusCode(500, new ApiException(500, "Deleting error"));
+                return StatusCode(500, new ApiException(500, "Greska prilikom brisanja admina."));
             }
 
 
@@ -150,26 +151,26 @@ namespace API.Controllers
                     if (adminEntity == null)
                     {
 
-                        return NotFound(new ApiResponse(404, "Admin with " + adminUpdate.AdminId + " not found"));
+                        return NotFound(new ApiResponse(404, "Admin sa " + adminUpdate.AdminId + " nije pronadjen"));
                     }
 
                     Admin admin = _mapper.Map<Admin>(adminUpdate);
-                    var existingAdminUsername = _repository.GetUsername(admin.AdminUserName, "Admin");
-                    if (existingAdminUsername.Equals(true))
-                        return BadRequest(new ApiResponse(400, "Username " + admin.AdminUserName + " already exixsts!"));
+                    var existingAdminKorisnickoIme = _repository.GetKorisnickoIme(admin.AdminKorisnickoIme, "Admin");
+                    if (existingAdminKorisnickoIme.Equals(true))
+                        return BadRequest(new ApiResponse(400, "KorisnickoIme " + admin.AdminKorisnickoIme + " vec postoji!"));
                     var existingAdminEmail = _repository.GetEmail(admin.AdminEmail, "Admin");
                     if (existingAdminEmail.Equals(true))
-                        return BadRequest(new ApiResponse(400, "Email " + admin.AdminEmail + " already exixsts!"));
-                    var updateJersey = await _repository.UpdateAsync(admin, adminEntity, (existingAdmin, newAdmin) =>
+                        return BadRequest(new ApiResponse(400, "Email " + admin.AdminEmail + "vec postoji!"));
+                    var updateDres = await _repository.UpdateAsync(admin, adminEntity, (existingAdmin, newAdmin) =>
                     {
                         existingAdmin.AdminId = newAdmin.AdminId;
-                        existingAdmin.AdminFirstName = newAdmin.AdminFirstName;
-                        existingAdmin.AdminLastName = newAdmin.AdminLastName;
-                        existingAdmin.AdminUserName = newAdmin.AdminUserName;
-                        existingAdmin.AdminPassword = newAdmin.AdminPassword;
-                        existingAdmin.AdminPhoneNumber = newAdmin.AdminPhoneNumber;
+                        existingAdmin.AdminIme = newAdmin.AdminIme;
+                        existingAdmin.AdminPrezime = newAdmin.AdminPrezime;
+                        existingAdmin.AdminKorisnickoIme = newAdmin.AdminKorisnickoIme;
+                        existingAdmin.AdminLozinka = BCrypt.Net.BCrypt.HashPassword(newAdmin.AdminLozinka);
+                        existingAdmin.AdminBrojTelefona = newAdmin.AdminBrojTelefona;
                         existingAdmin.AdminEmail = newAdmin.AdminEmail;
-                        existingAdmin.AdminAddress = newAdmin.AdminAddress;
+                        existingAdmin.AdminAdresa = newAdmin.AdminAdresa;
 
                         return existingAdmin;
                     });
@@ -179,13 +180,13 @@ namespace API.Controllers
                 }
                 else
                 {
-                    return BadRequest(new ApiResponse(400, "Incorrect email format"));
+                    return BadRequest(new ApiResponse(400, "Nepravilan format mejla"));
                 }
                 
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiException(500, "Updating error"));
+                return StatusCode(500, new ApiException(500, "Greska prilikom editovanja admina"));
             }
 
         }

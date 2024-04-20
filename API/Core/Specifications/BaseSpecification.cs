@@ -36,15 +36,15 @@ namespace Core.Specifications
             Includes.Add(includeExpression);
         }
 
-        protected void AddOrderBy(Expression<Func<T, object>> orderByExpression)
+        protected void AddOrderBy(Expression<Func<T, object>> OrderByExpression)
         {
-            OrderBy = orderByExpression;
+            OrderBy = OrderByExpression;
         }
 
 
-        protected void AddOrderByDescending(Expression<Func<T, object>> orderByDescExpression)
+        protected void AddOrderByDescending(Expression<Func<T, object>> OrderByDescExpression)
         {
-            OrderByDescending = orderByDescExpression;
+            OrderByDescending = OrderByDescExpression;
         }
 
         protected void ApplyPaging(int skip, int take)

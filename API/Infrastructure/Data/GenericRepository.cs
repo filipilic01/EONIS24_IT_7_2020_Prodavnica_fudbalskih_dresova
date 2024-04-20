@@ -57,25 +57,25 @@ namespace Infrastructure.Data
 
         public async Task<T> AddAsync(T add)
         {
-            var jersey = await _context.Set<T>().AddAsync(add);
+            var Dres = await _context.Set<T>().AddAsync(add);
             await _context.SaveChangesAsync();
-            return jersey.Entity;
+            return Dres.Entity;
         }
 
-        public async Task<T> UpdateAsync(T updateRequest, T existingJersey, Func<T, T, T> update)
+        public async Task<T> UpdateAsync(T updateRequest, T existingDres, Func<T, T, T> update)
         {
            
-            var updatedEntity = update(existingJersey, updateRequest);
-            _context.Entry(existingJersey).CurrentValues.SetValues(updatedEntity);
+            var updatedEntity = update(existingDres, updateRequest);
+            _context.Entry(existingDres).CurrentValues.SetValues(updatedEntity);
             await _context.SaveChangesAsync();
             return updatedEntity;
         }
 
-        public bool GetUsername(string username, string flag)
+        public bool GetKorisnickoIme(string KorisnickoIme, string flag)
         {
             if (flag == "Admin")
             {
-                var admin =  _context.Admins.Where(u => u.AdminUserName == username).FirstOrDefault();
+                var admin =  _context.Admins.Where(u => u.AdminKorisnickoIme == KorisnickoIme).FirstOrDefault();
                 if(admin == null)
                 {
                     return false;
@@ -87,8 +87,8 @@ namespace Infrastructure.Data
             }
             else
             {
-                var customer = _context.Customers.Where(u => u.CustomerUserName == username).FirstOrDefault();
-                if (customer == null)
+                var Kupac = _context.Kupacs.Where(u => u.KupacKorisnickoIme == KorisnickoIme).FirstOrDefault();
+                if (Kupac == null)
                 {
                     return false;
                 }
@@ -116,8 +116,8 @@ namespace Infrastructure.Data
             }
             else
             {
-                var customer = _context.Customers.Where(u => u.CustomerEmail == email).FirstOrDefault();
-                if (customer == null)
+                var Kupac = _context.Kupacs.Where(u => u.KupacEmail == email).FirstOrDefault();
+                if (Kupac == null)
                 {
                     return false;
                 }
@@ -129,25 +129,25 @@ namespace Infrastructure.Data
 
         }
 
-        public Admin GetAdminByUsername(string username)
+        public Admin GetAdminByKorisnickoIme(string KorisnickoIme)
         {
-           return _context.Admins.FirstOrDefault(a => a.AdminUserName == username);
+           return _context.Admins.FirstOrDefault(a => a.AdminKorisnickoIme == KorisnickoIme);
 
         }
-        public Customer GetCustomerByUsername(string username)
+        public Kupac GetKupacByKorisnickoIme(string KorisnickoIme)
         {
-            return _context.Customers.FirstOrDefault(a => a.CustomerUserName == username);
+            return _context.Kupacs.FirstOrDefault(a => a.KupacKorisnickoIme == KorisnickoIme);
         }
 
-        public async Task<List<OrderItem>> GetOrderItemsByOrderId(Guid id)
+        public async Task<List<StavkaPorudzbine>> GetStavkaPorudzbineByPorudzbinaId(Guid id)
         {
-            var items =  await _context.OrderItems.Where(o => o.OrderId == id).AsNoTracking().Include(s => s.JerseySize).ToListAsync();
+            var items =  await _context.StavkaPorudzbines.Where(o => o.PorudzbinaId == id).AsNoTracking().Include(s => s.VelicinaDresaId).ToListAsync();
             return items;
         }
-        public async Task<List<Order>> GetOrdersByCustomerId(Guid id)
+        public async Task<List<Porudzbina>> GetPorudzbinasByKupacId(Guid id)
         {
-            var orders = await _context.Orders.Where(o => o.CustomerId == id).ToListAsync();
-            return orders;
+            var porudzbinas = await _context.Porudzbinas.Where(o => o.KupacId == id).ToListAsync();
+            return porudzbinas;
         }
         private IQueryable<T> ApplySpecification(ISpecification<T> specification)
         {

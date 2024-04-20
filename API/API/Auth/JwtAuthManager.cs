@@ -18,7 +18,7 @@ namespace API.Auth
             this.configuration = configuration;
         }
 
-        public JwtToken Authenticate(string UserName, string Password, string role, Guid UserId)
+        public JwtToken Authenticate(string KorisnickoIme, string Lozinka, string role, Guid UserId)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var secret = configuration["ApplicationSettings:JWT_Secret"].ToString(); // Retrieve the JWT secret key
@@ -27,7 +27,7 @@ namespace API.Auth
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, UserName),
+                    new Claim(ClaimTypes.Name, KorisnickoIme),
                     new Claim("JWTID", Guid.NewGuid().ToString()),
                     new Claim(ClaimTypes.Role, role),
                     new Claim("UserId", UserId.ToString())
@@ -45,7 +45,7 @@ namespace API.Auth
 
                 ExpiresOn = String.Format("{0:dd-MM-yyyy hh:mm:ss}", (DateTime)tokenDescriptor.Expires),
 
-                Username = UserName,
+                KorisnickoIme = KorisnickoIme,
                 Role = role,
                 UserId = UserId
 

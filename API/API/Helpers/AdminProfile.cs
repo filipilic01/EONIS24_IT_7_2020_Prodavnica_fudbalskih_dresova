@@ -1,4 +1,4 @@
-﻿using API.Dtos.Admins;
+﻿using API.Dtos.Admin;
 using AutoMapper;
 using Core.Entities;
 

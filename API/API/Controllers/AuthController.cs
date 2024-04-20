@@ -12,13 +12,13 @@ namespace API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IGenericRepository<Admin> _adminRepository;
-        private readonly IGenericRepository<Customer> _customerRepository;
+        private readonly IGenericRepository<Kupac> _kupacRepository;
         private readonly IJwtAuthManager _jwtAuthManager;
 
-        public AuthController(IGenericRepository<Admin> adminRepository, IGenericRepository<Customer> customerRepository, IJwtAuthManager jwtAuthManager)
+        public AuthController(IGenericRepository<Admin> adminRepository, IGenericRepository<Kupac> kupacRepository, IJwtAuthManager jwtAuthManager)
         {
             _adminRepository = adminRepository;
-            _customerRepository = customerRepository;
+            _kupacRepository = kupacRepository;
             _jwtAuthManager = jwtAuthManager;
         }
 
@@ -26,39 +26,39 @@ namespace API.Controllers
         [AllowAnonymous]
         public IActionResult Authenticate([FromBody] AuthCreds authCreds)
         {
-            Admin admin = _adminRepository.GetAdminByUsername(authCreds.UserName);
+            Admin admin = _adminRepository.GetAdminByKorisnickoIme(authCreds.KorisnickoIme);
 
-            Customer customer = _customerRepository.GetCustomerByUsername(authCreds.UserName);
+            Kupac kupac = _kupacRepository.GetKupacByKorisnickoIme(authCreds.KorisnickoIme);
 
-            if (admin == null && customer == null)
+            if (admin == null && kupac == null)
             {
-                return NotFound(new ApiResponse(404, "User not found"));
+                return NotFound(new ApiResponse(404, "User nije pronadjen"));
             }
 
             if (admin != null)
             {
-                if (!BCrypt.Net.BCrypt.Verify(authCreds.Password, admin.AdminPassword))
+                if (!BCrypt.Net.BCrypt.Verify(authCreds.Lozinka, admin.AdminLozinka))
                 {
-                    return Unauthorized(new ApiResponse(401, "Invalid password"));
+                    return Unauthorized(new ApiResponse(401, "Invalid Lozinka"));
                 }
                 else
                 {
-                    var token = _jwtAuthManager.Authenticate(authCreds.UserName, authCreds.Password, "Admin", admin.AdminId);
-                    return Ok(new { Token = token.Token, ExpiresOn = token.ExpiresOn, Username = token.Username,Role = token.Role, UserId = token.UserId });
+                    var token = _jwtAuthManager.Authenticate(authCreds.KorisnickoIme, authCreds.Lozinka, "Admin", admin.AdminId);
+                    return Ok(new { Token = token.Token, ExpiresOn = token.ExpiresOn, KorisnickoIme = token.KorisnickoIme,Role = token.Role, UserId = token.UserId });
                 }
 
 
             }
             else
             {
-                if (!BCrypt.Net.BCrypt.Verify(authCreds.Password, customer.CustomerPassword))
+                if (!BCrypt.Net.BCrypt.Verify(authCreds.Lozinka, kupac.KupacLozinka))
                 {
-                    return Unauthorized(new ApiResponse(401, "Invalid password"));
+                    return Unauthorized(new ApiResponse(401, "Invalid Lozinka"));
                 }
                 else
                 {
-                    var token = _jwtAuthManager.Authenticate(authCreds.UserName, authCreds.Password,"Customer", customer.CustomerId);
-                    return Ok(new { Token = token.Token, ExpiresOn = token.ExpiresOn, Username = token.Username,Role = token.Role, UserId = token.UserId });
+                    var token = _jwtAuthManager.Authenticate(authCreds.KorisnickoIme, authCreds.Lozinka,"Kupac", kupac.KupacId);
+                    return Ok(new { Token = token.Token, ExpiresOn = token.ExpiresOn, KorisnickoIme = token.KorisnickoIme,Role = token.Role, UserId = token.UserId });
                 }
             }
 

@@ -18,16 +18,16 @@ namespace Core.Interfaces
 
         Task<T> GetEntityWithSpec(ISpecification<T> spec);
 
-        Task<List<OrderItem>> GetOrderItemsByOrderId(Guid id);
-        Task<List<Order>> GetOrdersByCustomerId(Guid id);
+        Task<List<StavkaPorudzbine>> GetStavkaPorudzbineByPorudzbinaId(Guid id);
+        Task<List<Porudzbina>> GetPorudzbinasByKupacId(Guid id);
         Task<int> CountAsync(ISpecification<T> spec);
 
-        bool GetUsername(string username, string flag);
+        bool GetKorisnickoIme(string KorisnickoIme, string flag);
         bool GetEmail(string email, string flag);
-        Task<T> UpdateAsync(T updateRequest, T existingJersey, Func<T, T, T> update);
+        Task<T> UpdateAsync(T updateRequest, T existingDres, Func<T, T, T> update);
 
-        Admin GetAdminByUsername(string username);
-        Customer GetCustomerByUsername(string username);
+        Admin GetAdminByKorisnickoIme(string KorisnickoIme);
+        Kupac GetKupacByKorisnickoIme(string KorisnickoIme);
         Task DeleteAsync(Guid id);
         Task<T> AddAsync(T add);
     }

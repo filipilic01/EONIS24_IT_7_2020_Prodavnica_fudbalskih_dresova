@@ -2,6 +2,6 @@
 {
     public interface IJwtAuthManager
     {
-        JwtToken Authenticate(string UserName, string Password, string Role, Guid UserId);
+        JwtToken Authenticate(string KorisnickoIme, string Lozinka, string Role, Guid UserId);
     }
 }
