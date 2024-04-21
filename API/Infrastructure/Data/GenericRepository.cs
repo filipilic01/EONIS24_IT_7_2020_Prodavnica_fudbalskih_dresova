@@ -141,7 +141,7 @@ namespace Infrastructure.Data
 
         public async Task<List<StavkaPorudzbine>> GetStavkaPorudzbineByPorudzbinaId(Guid id)
         {
-            var items =  await _context.StavkaPorudzbines.Where(o => o.PorudzbinaId == id).AsNoTracking().Include(s => s.VelicinaDresaId).ToListAsync();
+            var items =  await _context.StavkaPorudzbines.Where(o => o.PorudzbinaId == id).AsNoTracking().Include(s => s.VelicinaDresa).ToListAsync();
             return items;
         }
         public async Task<List<Porudzbina>> GetPorudzbinasByKupacId(Guid id)

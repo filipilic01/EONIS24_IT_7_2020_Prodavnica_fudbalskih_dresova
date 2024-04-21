@@ -11,7 +11,9 @@ namespace Core.Specifications
     {
         public DresWithFiltersForCountSpecification(DresSpecParams specParams)
              : base(x =>
-             (specParams.Search == null || x.ImeIgraca.ToLower().Contains(specParams.Search)) &&
+             (specParams.Search == null || x.ImeIgraca.ToLower().Contains(specParams.Search) ||
+             x.Tim.ToLower().Contains(specParams.Search) || x.Brend.ToLower().Contains(specParams.Search) ||
+             x.Takmicenje.ToLower().Contains(specParams.Search)) &&
                 (specParams.Tim == null || x.Tim == specParams.Tim) && (specParams.Brend == null || x.Brend == specParams.Brend) &&
                     (specParams.Takmicenje == null || x.Takmicenje == specParams.Takmicenje) &&
                     (specParams.Player == null || x.ImeIgraca == specParams.Player))

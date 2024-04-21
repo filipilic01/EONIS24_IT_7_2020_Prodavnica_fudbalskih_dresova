@@ -22,7 +22,7 @@ namespace Core.Specifications
         public string? Brend { get; set; }
         public string? Takmicenje { get; set; }
         public string? Player { get; set; }
-        public string Sort { get; set; }
+        public string? Sort { get; set; }
 
         private string _search;
 

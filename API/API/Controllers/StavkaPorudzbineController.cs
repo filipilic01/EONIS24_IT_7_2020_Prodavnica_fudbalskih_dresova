@@ -154,21 +154,21 @@ namespace API.Controllers
 
         }
         
-        [HttpGet("Porudzbina/{PorudzbinaId}")]
+        [HttpGet("Porudzbina/{porudzbinaId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
        
         [Authorize(Roles = "Admin, Kupac")]
-        public async Task<ActionResult<List<StavkaPorudzbineDto>>> GetStavkaPorudzbinesByPorudzbinaId(Guid PorudzbinaId)
+        public async Task<ActionResult<List<StavkaPorudzbineDto>>> GetStavkaPorudzbinesByPorudzbinaId(Guid porudzbinaId)
         {
-            var stavkaPorudzbines = await _repository.GetStavkaPorudzbineByPorudzbinaId(PorudzbinaId);
+            var stavkaPorudzbines = await _repository.GetStavkaPorudzbineByPorudzbinaId(porudzbinaId);
 
             if (stavkaPorudzbines == null)
-                return NotFound(new ApiResponse(404, "Porudzbina with ID " + PorudzbinaId + " not found"));
+                return NotFound(new ApiResponse(404, "Porudzbina sa ID " + porudzbinaId + " ne postoji"));
 
-            var StavkaPorudzbinesDto = _mapper.Map<IEnumerable<StavkaPorudzbine>, IEnumerable<StavkaPorudzbineDto>>(stavkaPorudzbines);
-            return Ok(StavkaPorudzbinesDto.ToList());
+            var stavkaPorudzbinesDto = _mapper.Map<IEnumerable<StavkaPorudzbine>, IEnumerable<StavkaPorudzbineDto>>(stavkaPorudzbines);
+            return Ok(stavkaPorudzbinesDto.ToList());
         }
     }
 }
