@@ -4,6 +4,7 @@ using Core.Entities;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace API.Controllers
 {
@@ -39,7 +40,7 @@ namespace API.Controllers
             {
                 if (!BCrypt.Net.BCrypt.Verify(authCreds.Lozinka, admin.AdminLozinka))
                 {
-                    return Unauthorized(new ApiResponse(401, "Invalid Lozinka"));
+                    return Unauthorized(new ApiResponse(401, "Neispravna lozinka"));
                 }
                 else
                 {
@@ -64,6 +65,31 @@ namespace API.Controllers
 
 
 
+        }
+
+        [Authorize(Roles = "Admin, Kupac")]
+        [HttpGet("currentUser")]
+        public IActionResult GetCurrentUser()
+        {
+            var userName = User.FindFirst(ClaimTypes.Name)?.Value;
+            var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            var userIdClaim = User.FindFirst("UserId");
+            var userId = userIdClaim != null ? Guid.Parse(userIdClaim.Value) : Guid.Empty;
+            var jwtToken = HttpContext.Request.Headers["Authorization"].ToString()?.Replace("Bearer ", "");
+            var expiresOn = DateTime.UtcNow.AddHours(5);
+
+
+            var currentUser = new
+            {
+                Token = jwtToken,
+                ExpiresOn = expiresOn,
+                KorisnickoIme = userName,
+                Role = userRole,
+                UserId = userId
+                
+            };
+
+            return Ok(currentUser);
         }
 
 

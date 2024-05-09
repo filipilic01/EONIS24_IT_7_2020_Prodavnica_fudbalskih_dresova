@@ -11,7 +11,7 @@ namespace API.Helpers
         {
             CreateMap<StavkaPorudzbine, StavkaPorudzbineDto>()
                 .ForMember(d => d.Porudzbina, o => o.MapFrom(s => (s.PorudzbinaId)))
-                .ForMember(d => d.VelicinaDresa, o => o.MapFrom(s => (s.VelicinaDresa.VelicinaDresaVrednost + " " + s.VelicinaDresa.DresId)));
+                .ForMember(d => d.VelicinaDresa, o => o.MapFrom(s => (s.VelicinaDresaId)));
 
             CreateMap<StavkaPorudzbineCreationDto, StavkaPorudzbine>()
               .ForMember(dest => dest.PorudzbinaId, opt => opt.MapFrom(src => src.PorudzbinaId))

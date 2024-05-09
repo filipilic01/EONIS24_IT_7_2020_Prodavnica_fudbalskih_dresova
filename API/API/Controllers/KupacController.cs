@@ -29,7 +29,7 @@ namespace API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<KupacDto>>> GetKupacs()
         {
 
@@ -73,10 +73,10 @@ namespace API.Controllers
                 {
                     var existingKupacKorisnickoIme = _repository.GetKorisnickoIme(KupacPost.KupacKorisnickoIme, "Kupac");
                     if (existingKupacKorisnickoIme.Equals(true))
-                        return BadRequest(new ApiResponse(400, "KorisnickoIme " + KupacPost.KupacKorisnickoIme + " vec postoji!"));
+                        return BadRequest(new ApiResponse(400, "Korisničko ime " + KupacPost.KupacKorisnickoIme + " već postoji!"));
                     var existingKupacEmail = _repository.GetEmail(KupacPost.KupacEmail, "Kupac");
                     if (existingKupacEmail.Equals(true))
-                        return BadRequest(new ApiResponse(400, "Email " + KupacPost.KupacEmail + " vec postoji!"));
+                        return BadRequest(new ApiResponse(400, "Email " + KupacPost.KupacEmail + " već postoji!"));
                     Kupac KupacEntity = _mapper.Map<Kupac>(KupacPost);
                     KupacEntity.KupacId = Guid.NewGuid();
                     KupacEntity.KupacLozinka = BCrypt.Net.BCrypt.HashPassword(KupacPost.KupacLozinka);

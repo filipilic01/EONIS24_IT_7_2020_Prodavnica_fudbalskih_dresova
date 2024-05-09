@@ -10,7 +10,7 @@ namespace API.Helpers
         public VelicinaDresaProfile()
         {
             CreateMap<VelicinaDresa, VelicinaDresaDto>()
-                .ForMember(d => d.Dres, o => o.MapFrom(s => (s.Dres.ImeIgraca + " " + s.Dres.Tim + " " + s.Dres.Sezona)));
+                .ForMember(d => d.Dres, o => o.MapFrom(s => s.DresId));
 
             CreateMap<VelicinaDresaCreationDto, VelicinaDresa>()
               .ForMember(dest => dest.DresId, opt => opt.MapFrom(src => src.DresId));

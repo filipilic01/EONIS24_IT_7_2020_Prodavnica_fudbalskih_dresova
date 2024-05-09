@@ -27,6 +27,7 @@ namespace Infrastructure.Data
 
             if (spec.OrderByDescending != null)
             {
+                
                 query = query.OrderByDescending(spec.OrderByDescending);
             }
 

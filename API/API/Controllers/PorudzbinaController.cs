@@ -9,11 +9,13 @@ using Core.Interfaces;
 using Core.Specifications;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 
 namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [EnableCors]
     public class PorudzbinaController : ControllerBase
     {
         private readonly IGenericRepository<Porudzbina> _repository;
@@ -28,7 +30,7 @@ namespace API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<PorudzbinaDto>>> GetPorudzbinas()
         {
             var spec = new PorudzbinaWithKupacSpecification();
@@ -64,7 +66,7 @@ namespace API.Controllers
         [Consumes("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Roles = "Admin, Kupac")]
+        [AllowAnonymous]
         public async Task<ActionResult<PorudzbinaDto>> AddPorudzbina([FromBody] PorudzbinaCreationDto porudzbinaPost)
         {
             try
@@ -89,7 +91,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{porudzbinaId}")]
-        [Authorize(Roles = "Admin,  Kupac")]
+       [AllowAnonymous]
 
         public async Task<IActionResult> DeletePorudzbina(Guid porudzbinaId)
         {

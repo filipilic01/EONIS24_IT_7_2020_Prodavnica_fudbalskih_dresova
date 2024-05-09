@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("errors/{code}")]
+    [Route("api/errors/{code}")]
     public class ErrorController : ControllerBase
     {
         [HttpGet]

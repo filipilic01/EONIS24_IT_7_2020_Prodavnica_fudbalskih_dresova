@@ -35,6 +35,8 @@ namespace Infrastructure.Data
         public async Task DeleteAsync(Guid id)
         {
             var enitityForDelete = await _context.Set<T>().FindAsync(id);
+            
+            
             _context.Set<T>().Remove(enitityForDelete);
             
             await _context.SaveChangesAsync();
@@ -141,13 +143,18 @@ namespace Infrastructure.Data
 
         public async Task<List<StavkaPorudzbine>> GetStavkaPorudzbineByPorudzbinaId(Guid id)
         {
-            var items =  await _context.StavkaPorudzbines.Where(o => o.PorudzbinaId == id).AsNoTracking().Include(s => s.VelicinaDresa).ToListAsync();
+            var items =  await _context.StavkaPorudzbines.Where(o => o.PorudzbinaId == id).AsNoTracking().Include(s => s.VelicinaDresa).ThenInclude(d => d.Dres).ToListAsync();
             return items;
         }
         public async Task<List<Porudzbina>> GetPorudzbinasByKupacId(Guid id)
         {
             var porudzbinas = await _context.Porudzbinas.Where(o => o.KupacId == id).ToListAsync();
             return porudzbinas;
+        }
+        public async Task<List<VelicinaDresa>> GetVelicineDresovaByDresId(Guid id)
+        {
+            var velicine = await _context.VelicinaDresas.Where(o => o.DresId == id).ToListAsync();
+            return velicine;
         }
         private IQueryable<T> ApplySpecification(ISpecification<T> specification)
         {

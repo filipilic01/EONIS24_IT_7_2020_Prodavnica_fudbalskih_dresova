@@ -7,11 +7,13 @@ using Core.Interfaces;
 using Core.Specifications;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 
 namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [EnableCors]
     public class StavkaPorudzbineController : ControllerBase
     {
         private readonly IGenericRepository<StavkaPorudzbine> _repository;
@@ -26,7 +28,7 @@ namespace API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<StavkaPorudzbineDto>>> GetStavkaPorudzbines()
         {
             var spec = new StavkaWithPorudzbinaAndVelicinaDresaSpecification();
@@ -60,9 +62,9 @@ namespace API.Controllers
 
         [HttpPost]
         [Consumes("application/json")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Roles = "Admin, Kupac")]
+        [AllowAnonymous]
         public async Task<ActionResult<StavkaPorudzbineDto>> AddStavkaPorudzbine([FromBody] StavkaPorudzbineCreationDto stavkaPorudzbinePost)
         {
             try
@@ -71,9 +73,10 @@ namespace API.Controllers
                 stavkaPorudzbineEntity.StavkaPorudzbineId = Guid.NewGuid();
 
                 await _repository.AddAsync(stavkaPorudzbineEntity);
-                var spec = new StavkaWithPorudzbinaAndVelicinaDresaSpecification(stavkaPorudzbineEntity.PorudzbinaId);
+                var spec = new StavkaWithPorudzbinaAndVelicinaDresaSpecification(stavkaPorudzbineEntity.StavkaPorudzbineId);
                 var item = await _repository.GetEntityWithSpec(spec);
-                return Ok(_mapper.Map<StavkaPorudzbine, StavkaPorudzbineDto>(item));
+                Console.WriteLine(item);
+                return CreatedAtAction(nameof(AddStavkaPorudzbine), _mapper.Map<StavkaPorudzbine, StavkaPorudzbineDto>(item));
             }
             catch (Exception ex)
             {
@@ -87,7 +90,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{stavkaPorudzbineId}")]
-        [Authorize(Roles = "Admin, Kupac")]
+        [AllowAnonymous]
 
         public async Task<IActionResult> DeleteStavkaPorudzbine(Guid stavkaPorudzbineId)
         {
@@ -117,10 +120,11 @@ namespace API.Controllers
 
         [HttpPut]
         [Consumes("application/json")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Roles = "Admin, Kupac")]
+        [AllowAnonymous]
         public async Task<ActionResult<StavkaPorudzbineDto>> UpdateStavkaPorudzbine([FromBody] StavkaPorudzbineUpdateDto stavkaPorudzbineUpdate)
         {
             try
@@ -159,7 +163,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
        
-        [Authorize(Roles = "Admin, Kupac")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<StavkaPorudzbineDto>>> GetStavkaPorudzbinesByPorudzbinaId(Guid porudzbinaId)
         {
             var stavkaPorudzbines = await _repository.GetStavkaPorudzbineByPorudzbinaId(porudzbinaId);
@@ -168,7 +172,7 @@ namespace API.Controllers
                 return NotFound(new ApiResponse(404, "Porudzbina sa ID " + porudzbinaId + " ne postoji"));
 
             var stavkaPorudzbinesDto = _mapper.Map<IEnumerable<StavkaPorudzbine>, IEnumerable<StavkaPorudzbineDto>>(stavkaPorudzbines);
-            return Ok(stavkaPorudzbinesDto.ToList());
+            return Ok(stavkaPorudzbines.ToList());
         }
     }
 }

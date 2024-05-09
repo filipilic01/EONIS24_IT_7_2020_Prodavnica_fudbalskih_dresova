@@ -18,8 +18,9 @@ namespace Core.Specifications
             set => _pageSize = (value > MaxPageSize) ? MaxPageSize : value;
         }
 
+        public string? Tip { get; set; }
         public string? Tim { get; set; }
-        public string? Brend { get; set; }
+        public string? Sezona { get; set; }
         public string? Takmicenje { get; set; }
         public string? Player { get; set; }
         public string? Sort { get; set; }

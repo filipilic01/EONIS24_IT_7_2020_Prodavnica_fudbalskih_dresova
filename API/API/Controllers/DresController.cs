@@ -14,6 +14,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [EnableCors]
     public class DresController : ControllerBase
     {
         private readonly IGenericRepository<Dres> _repository;

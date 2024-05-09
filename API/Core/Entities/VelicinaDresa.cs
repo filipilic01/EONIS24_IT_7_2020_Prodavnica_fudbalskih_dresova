@@ -22,6 +22,6 @@ namespace Core.Entities
         public Guid DresId { get; set; }
 
         [JsonIgnore]
-        public StavkaPorudzbine StavkaPorudzbines { get; set; }
+        public ICollection<StavkaPorudzbine> StavkaPorudzbines { get; set; }
     }
 }

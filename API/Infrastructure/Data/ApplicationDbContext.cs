@@ -71,10 +71,10 @@ namespace Infrastructure.Data
                 .HasForeignKey(o => o.PorudzbinaId);
 
 
-            modelBuilder.Entity<VelicinaDresa>()
-                .HasOne(oi => oi.StavkaPorudzbines)
-                .WithOne(s => s.VelicinaDresa)
-                .HasForeignKey<StavkaPorudzbine>(oi => oi.VelicinaDresaId);
+            modelBuilder.Entity<StavkaPorudzbine>()
+                .HasOne(oi => oi.VelicinaDresa)
+                .WithMany(s => s.StavkaPorudzbines)
+                .HasForeignKey(oi => oi.VelicinaDresaId);
 
             modelBuilder.Entity<StavkaPorudzbine>(entry =>
             {

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240420193429_Init")]
+    [Migration("20240509123357_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -242,8 +242,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("PorudzbinaId");
 
-                    b.HasIndex("VelicinaDresaId")
-                        .IsUnique();
+                    b.HasIndex("VelicinaDresaId");
 
                     b.ToTable("StavkaPorudzbines", null, t =>
                         {
@@ -306,8 +305,8 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Core.Entities.VelicinaDresa", "VelicinaDresa")
-                        .WithOne("StavkaPorudzbines")
-                        .HasForeignKey("Core.Entities.StavkaPorudzbine", "VelicinaDresaId")
+                        .WithMany("StavkaPorudzbines")
+                        .HasForeignKey("VelicinaDresaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -349,8 +348,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.VelicinaDresa", b =>
                 {
-                    b.Navigation("StavkaPorudzbines")
-                        .IsRequired();
+                    b.Navigation("StavkaPorudzbines");
                 });
 #pragma warning restore 612, 618
         }

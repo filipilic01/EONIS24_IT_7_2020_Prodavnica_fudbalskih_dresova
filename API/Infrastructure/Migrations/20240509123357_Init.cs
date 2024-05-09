@@ -185,8 +185,7 @@ namespace Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_StavkaPorudzbines_VelicinaDresaId",
                 table: "StavkaPorudzbines",
-                column: "VelicinaDresaId",
-                unique: true);
+                column: "VelicinaDresaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_VelicinaDresas_DresId",

@@ -1,4 +1,5 @@
 ﻿using API.Dtos.Dres;
+using API.Dtos.StavkaPorudzbine;
 using API.Dtos.VelicinaDresa;
 using API.Errors;
 using API.Helpers;
@@ -27,14 +28,14 @@ namespace API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<VelicinaDresaDto>>> GetVelicinaDresas()
         {
             var spec = new VelicinaDresaWithDresSpecification();
 
             var sizes = await _repository.ListAsync(spec);
 
-            if(sizes == null || sizes.Count == 0) 
+            if (sizes == null || sizes.Count == 0)
             {
                 return NoContent();
             }
@@ -141,8 +142,8 @@ namespace API.Controllers
                     existingVelicinaDresa.VelicinaDresaId = newVelicinaDresa.VelicinaDresaId;
                     existingVelicinaDresa.VelicinaDresaVrednost = newVelicinaDresa.VelicinaDresaVrednost;
                     existingVelicinaDresa.Kolicina = newVelicinaDresa.Kolicina;
-          
-                 
+
+
                     return existingVelicinaDresa;
                 });
                 var spec = new VelicinaDresaWithDresSpecification(size.VelicinaDresaId);
@@ -154,6 +155,29 @@ namespace API.Controllers
                 return StatusCode(500, new ApiException(500, "Greska prilikom editovanja velicine dresa"));
             }
 
+        }
+
+        [HttpGet("Dres/{dresId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<VelicinaDresaDto>>> GetVelicineDresovaByIdDres(Guid dresId)
+        {
+            var velicine = await _repository.GetVelicineDresovaByDresId(dresId);
+            
+            if (velicine == null)
+                return NotFound(new ApiResponse(404, "Dres sa ID " + dresId + " ne postoji"));
+
+            List<VelicinaDresa> list = new List<VelicinaDresa>();
+            foreach (VelicinaDresa v in velicine)
+            {
+                if (v.Kolicina > 0)
+                {
+                    list.Add(v);
+                }
+            }
+            var velicineDto = _mapper.Map<IEnumerable<VelicinaDresa>, IEnumerable<VelicinaDresaDto>>(list);
+            return Ok(velicineDto.ToList());
         }
     }
 }

@@ -13,11 +13,12 @@ namespace Core.Specifications
         public DresWithAdminSpecification(DresSpecParams specParams)
             : base(x =>
             (specParams.Search == null || x.ImeIgraca.ToLower().Contains(specParams.Search) ||
-             x.Tim.ToLower().Contains(specParams.Search) || x.Brend.ToLower().Contains(specParams.Search) ||
-             x.Takmicenje.ToLower().Contains(specParams.Search)) &&
+             x.Tip.ToLower().Contains(specParams.Search) || x.Sezona.ToLower().Contains(specParams.Search) ||
+             x.Takmicenje.ToLower().Contains(specParams.Search) || x.Tim.ToLower().Contains(specParams.Search)) &&
             
-                (specParams.Tim == null || x.Tim == specParams.Tim) && (specParams.Brend == null || x.Brend == specParams.Brend) &&
-                    (specParams.Takmicenje == null || x.Takmicenje == specParams.Takmicenje) && (specParams.Player == null || x.ImeIgraca == specParams.Player))
+                (specParams.Tip == null || x.Tip == specParams.Tip) && (specParams.Sezona == null || x.Sezona == specParams.Sezona) &&
+                    (specParams.Takmicenje == null || x.Takmicenje == specParams.Takmicenje) && (specParams.Player == null || x.ImeIgraca == specParams.Player)
+                        && (specParams.Tim == null || x.Tim == specParams.Tim))
 
         {
             AddInclude(x => x.Admin);

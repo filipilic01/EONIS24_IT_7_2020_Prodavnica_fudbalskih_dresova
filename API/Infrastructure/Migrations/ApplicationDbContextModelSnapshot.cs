@@ -239,8 +239,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("PorudzbinaId");
 
-                    b.HasIndex("VelicinaDresaId")
-                        .IsUnique();
+                    b.HasIndex("VelicinaDresaId");
 
                     b.ToTable("StavkaPorudzbines", null, t =>
                         {
@@ -303,8 +302,8 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Core.Entities.VelicinaDresa", "VelicinaDresa")
-                        .WithOne("StavkaPorudzbines")
-                        .HasForeignKey("Core.Entities.StavkaPorudzbine", "VelicinaDresaId")
+                        .WithMany("StavkaPorudzbines")
+                        .HasForeignKey("VelicinaDresaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -346,8 +345,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.VelicinaDresa", b =>
                 {
-                    b.Navigation("StavkaPorudzbines")
-                        .IsRequired();
+                    b.Navigation("StavkaPorudzbines");
                 });
 #pragma warning restore 612, 618
         }

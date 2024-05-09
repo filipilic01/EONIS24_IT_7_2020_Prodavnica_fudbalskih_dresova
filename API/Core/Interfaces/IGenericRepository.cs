@@ -19,6 +19,7 @@ namespace Core.Interfaces
         Task<T> GetEntityWithSpec(ISpecification<T> spec);
 
         Task<List<StavkaPorudzbine>> GetStavkaPorudzbineByPorudzbinaId(Guid id);
+        Task<List<VelicinaDresa>> GetVelicineDresovaByDresId(Guid id);
         Task<List<Porudzbina>> GetPorudzbinasByKupacId(Guid id);
         Task<int> CountAsync(ISpecification<T> spec);
 
