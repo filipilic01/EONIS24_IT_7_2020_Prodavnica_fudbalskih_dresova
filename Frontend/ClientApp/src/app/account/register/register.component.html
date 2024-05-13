@@ -1,0 +1,91 @@
+<div class="d-flex justify-content-center mt-5 mb-5" >
+ 
+    <div class="col-3" >
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" >
+            <div class="text-center mb-4">
+                <h1 class="mb-3">Registracija</h1>
+            </div>
+            <div class="form-floating mb-3">
+                <input [class.is-invalid]="registerForm.get('firstname')?.touched && registerForm.get('firstname')?.invalid"
+                [class.is-valid]="registerForm.get('firstname')?.valid" 
+                type="firstname"
+                formControlName="firstname" 
+                class="form-control is-invalid" id="floatingInput" placeholder="Ime">
+                <label for="floatingInput">Ime</label>
+                <div *ngIf="registerForm.get('firstname')?.errors?.['required']" class="invalid-feedback">Unesite ime</div>
+               
+            </div>
+            <div class="form-floating mb-3">
+                <input [class.is-invalid]="registerForm.get('lastname')?.touched && registerForm.get('lastname')?.invalid" 
+                [class.is-valid]="registerForm.get('lastname')?.valid" 
+                type="lastname"
+                formControlName="lastname" 
+                class="form-control is-invalid" id="floatingInput" placeholder="Prezime">
+                <label for="floatingInput">Prezime</label>
+                <div *ngIf="registerForm.get('lastname')?.errors?.['required']" class="invalid-feedback">Unesite prezime</div>
+               
+            </div>
+            <div class="form-floating mb-3">
+                <input [class.is-invalid]="registerForm.get('email')?.touched && registerForm.get('email')?.invalid" 
+                [class.is-valid]="registerForm.get('email')?.valid" 
+                type="email"
+                formControlName="email" 
+                class="form-control is-invalid" id="floatingInput" placeholder="Email">
+                <label for="floatingInput">Email</label>
+                <div *ngIf="registerForm.get('email')?.errors?.['required']" class="invalid-feedback">Unesite email</div>
+                <div *ngIf="registerForm.get('email')?.errors?.['email']" class="invalid-feedback">Neispravan format email-a</div>
+               
+            </div>
+            <div class="form-floating mb-3">
+                <input [class.is-invalid]="registerForm.get('username')?.touched && registerForm.get('username')?.invalid" 
+                [class.is-valid]="registerForm.get('username')?.valid" 
+                type="username"
+                formControlName="username" 
+                class="form-control is-invalid" id="floatingInput" placeholder="Korisničko ime">
+                <label for="floatingInput">Korisničko ime</label>
+                <div *ngIf="registerForm.get('username')?.errors?.['required']" class="invalid-feedback">Unesite korisničko ime</div>
+               
+            </div>
+            <div class="form-floating mb-3">
+                <input [class.is-invalid]="registerForm.get('password')?.touched && registerForm.get('password')?.invalid" 
+                [class.is-valid]="registerForm.get('password')?.valid" 
+                type="password" 
+                formControlName="password" class="form-control" id="floatingPassword" placeholder="Lozinka">
+                <label for="floatingPassword">Lozinka</label>
+                <div *ngIf="registerForm.get('password')?.errors?.['required']" class="invalid-feedback">Unesite lozinku</div>
+                <div *ngIf="registerForm.get('password')?.errors?.['pattern']" class="invalid-feedback">Lozinka nije dovoljno kompleksna</div>
+            </div>
+            <div class="form-floating mb-3">
+                <input [class.is-invalid]="registerForm.get('phoneNumber')?.touched && registerForm.get('phoneNumber')?.invalid" 
+                [class.is-valid]="registerForm.get('phoneNumber')?.valid" 
+                type="phoneNumber"
+                formControlName="phoneNumber" 
+                class="form-control is-invalid" id="floatingInput" placeholder="Broj telefona">
+                <label for="floatingInput">Broj telefona</label>
+                <div *ngIf="registerForm.get('phoneNumber')?.errors?.['required']" class="invalid-feedback">Unesite broj telefona</div>
+               
+            </div>
+            <div class="form-floating mb-3">
+                <input [class.is-invalid]="registerForm.get('address')?.touched && registerForm.get('address')?.invalid" 
+                [class.is-valid]="registerForm.get('address')?.valid" 
+                type="address"
+                formControlName="address" 
+                class="form-control is-invalid" id="floatingInput" placeholder="Adresa">
+                <label for="floatingInput">Adresa</label>
+                <div *ngIf="registerForm.get('address')?.errors?.['required']" class="invalid-feedback">Unesite adresu</div>
+               
+            </div>
+            <ul class="text-danger list-unstyled">
+                 <li *ngFor="let error of errors">
+                    {{error}}
+                 </li>
+            </ul>
+            <div class="d-grid">
+                <button [disabled]="registerForm.invalid" class="btn btn-lg btn-primary mt-3" type="submit">
+                    Registruj se
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>

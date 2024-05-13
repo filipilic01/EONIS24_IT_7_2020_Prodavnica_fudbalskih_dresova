@@ -1,0 +1,60 @@
+
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <div class="d-flex mt-2">
+            <input (keyup.enter)="onSearch()" type="text" placeholder="Search" class="form-control me-2" #search>
+            <button (click)="onSearch()" class="btn btn-outline-primary mx-2">Pretraži</button>
+            <button (click)="onReset()" class="btn btn-outline-success mx-2">Resetuj</button>
+        </div>
+         <div class="text-center">
+             <h2>Dresovi</h2>
+             <button (click)="openAddDialog()" class="btn btn-outline-success">
+                <i class="fa fa-plus"></i>
+              </button>
+         </div>
+        <table class="table">
+            <thead>
+                <tr>
+                   
+                    <th>Igrač</th>
+                    <th>Tim</th>
+                    <th>Sezona</th>
+                    <th>Brend</th>
+                    <th>Tip</th>
+                    <th>Cena</th>
+                    <th>Takmičenje</th>
+                    <th>Zemlja</th>
+                 
+                </tr>
+            </thead>
+            <tbody *ngFor="let dres of dresovi">
+                <tr>
+                    
+                    <td class="align-middle">{{dres.imeIgraca}}</td>
+                    <td class="align-middle">{{dres.tim}}</td>
+                    <td class="align-middle">{{dres.sezona}}</td>
+                    <td class="align-middle">{{dres.brend}}</td>
+                    <td class="align-middle">{{dres.tip}}</td>
+                    <td class="align-middle">{{dres.cena}}<span> RSD</span></td>
+                    <td class="align-middle">{{dres.takmicenje}}</td>
+                    <td class="align-middle">{{dres.zemlja}}</td>
+                    <td class="align-middle">
+                        <button (click)="openEditDialog(dres)" class="btn btn-outline-secondary">
+                            <i class="fa fa-edit"></i>
+                          </button>
+                    </td>
+                    <td class="align-middle">
+                        <button (click)="openDeleteDialog(dres)"  class="btn btn-outline-danger">
+                            <i class="fa fa-trash-o"></i>
+                          </button>
+                    </td>
+                  
+                </tr>
+            </tbody>
+        
+        </table>
+
+        
+    </div>
+</div>
+

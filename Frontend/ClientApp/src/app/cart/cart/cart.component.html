@@ -1,0 +1,76 @@
+
+<div class="row">
+    <div class="col-md-8 offset-2">
+         <div class="text-center">
+             <h2>Korpa</h2>
+
+         </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Količina</th>
+                    <th></th>
+                    <th>Tim</th>
+                    <th>Sezona</th>
+                    <th>Tip</th>
+                    <th>Veličina</th>
+                    <th>Cena dresa</th>
+                    <th>Cena stavke</th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let stavka of stavke">
+                <tr>
+                    <td class="align-middle">{{stavka.brojStavki}}</td>
+                    <td class="align-middle"><img src="{{stavka.velicinaDresa.dres.slikaUrl}}" width="35px" height="35px" ></td>
+                    <td class="align-middle"><a routerLink="/shop/{{stavka.velicinaDresa.dres.dresId}}" class="text-decoration-none" style="color: black;">{{stavka.velicinaDresa.dres.tim}}</a></td>
+                    <td class="align-middle">{{stavka.velicinaDresa.dres.sezona}}</td>
+                    <td class="align-middle">{{stavka.velicinaDresa.dres.tip}}</td>
+                    <td class="align-middle">{{stavka.velicinaDresa.velicinaDresaVrednost}}</td>
+                    <td class="align-middle">{{formatPrice(stavka.velicinaDresa.dres.cena)}}<span> RSD</span></td>
+                    <td class="align-middle">{{formatPrice(stavka.brojStavki * stavka.velicinaDresa.dres.cena)}}<span> RSD</span></td>
+                    <td class="align-middle">
+                
+                        <a class="text-danger" style="padding-right: 5px;" (click)="removeItemFromCart(stavka)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"  fill="currentColor" class="bi bi-dash-square" viewBox="0 0 16 16">
+                                <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                                <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z" />
+                            </svg>
+                        </a>
+                        <a class="text-success" (click)="addItemToCart(stavka)" >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
+                                <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                            </svg>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6"></td>
+                    <td><b>Total:</b></td>
+                    <td>
+                        {{formatPrice(total)}} RSD
+                    </td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="text-center">
+            <div class="btn-group">
+               
+                <div (click)="toCheckout()" *ngIf="total!=0" id="stripe-btn">
+                    <a class="btn btn-outline-secondary">
+                        Nastavi na plaćanje
+                    </a>
+                </div>
+                <span style="padding:1px"></span>
+                <a class="btn btn-outline-success" routerLink="/shop" >
+                    Dodaj još dresova
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>

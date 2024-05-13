@@ -1,0 +1,16 @@
+<header *ngIf="pageIndex && pageSize && totalCount">
+    <span *ngIf="totalCount>0">
+        Prikazano 
+        <strong>
+            {{(pageIndex -1) * pageSize + 1}} - 
+            {{pageIndex * pageSize 
+            > totalCount
+            ? totalCount
+            : pageIndex * pageSize
+            }}
+        </strong> od <strong>{{totalCount}}</strong> dresova
+    </span>
+</header>
+<header *ngIf="!totalCount">
+ <span>Nema rezultata na osnovu primenjenog filtera.</span>
+</header>
