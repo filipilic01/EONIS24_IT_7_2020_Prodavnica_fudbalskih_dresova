@@ -28,7 +28,7 @@ namespace API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<StavkaPorudzbineDto>>> GetStavkaPorudzbines()
         {
             var spec = new StavkaWithPorudzbinaAndVelicinaDresaSpecification();
@@ -48,7 +48,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("{stavkaPorudzbineId}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Kupac")]
         public async Task<ActionResult<StavkaPorudzbineDto>> GetStavkaPorudzbineById(Guid stavkaPorudzbineId)
         {
             var spec = new StavkaWithPorudzbinaAndVelicinaDresaSpecification(stavkaPorudzbineId);
@@ -64,7 +64,7 @@ namespace API.Controllers
         [Consumes("application/json")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [AllowAnonymous]
+        [Authorize(Roles = "Kupac")]
         public async Task<ActionResult<StavkaPorudzbineDto>> AddStavkaPorudzbine([FromBody] StavkaPorudzbineCreationDto stavkaPorudzbinePost)
         {
             try
@@ -90,7 +90,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{stavkaPorudzbineId}")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Kupac")]
 
         public async Task<IActionResult> DeleteStavkaPorudzbine(Guid stavkaPorudzbineId)
         {
@@ -124,7 +124,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [AllowAnonymous]
+        [Authorize(Roles = "Kupac")]
         public async Task<ActionResult<StavkaPorudzbineDto>> UpdateStavkaPorudzbine([FromBody] StavkaPorudzbineUpdateDto stavkaPorudzbineUpdate)
         {
             try
@@ -162,8 +162,8 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-       
-        [AllowAnonymous]
+
+        [Authorize(Roles = "Kupac")]
         public async Task<ActionResult<List<StavkaPorudzbineDto>>> GetStavkaPorudzbinesByPorudzbinaId(Guid porudzbinaId)
         {
             var stavkaPorudzbines = await _repository.GetStavkaPorudzbineByPorudzbinaId(porudzbinaId);

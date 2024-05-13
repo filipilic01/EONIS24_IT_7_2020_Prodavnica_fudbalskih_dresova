@@ -57,7 +57,7 @@ namespace Infrastructure.Migrations
                     Sezona = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     Brend = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Cena = table.Column<double>(type: "float", nullable: false),
-                    SlikaUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    SlikaUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Tip = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     Zemlja = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Takmicenje = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),

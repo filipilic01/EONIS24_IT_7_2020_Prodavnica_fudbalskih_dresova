@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240509123357_Init")]
+    [Migration("20240512133304_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -106,8 +106,7 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("SlikaUrl")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
                         .IsRequired()

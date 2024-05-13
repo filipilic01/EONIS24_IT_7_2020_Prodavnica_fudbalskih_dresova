@@ -103,8 +103,7 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("SlikaUrl")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
                         .IsRequired()

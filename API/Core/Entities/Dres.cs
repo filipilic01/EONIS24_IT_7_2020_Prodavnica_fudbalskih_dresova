@@ -31,7 +31,7 @@ namespace Core.Entities
         public double Cena { get; set; }
 
         [Required]
-        [StringLength(500)]
+        
         public string SlikaUrl { get; set; }
 
         [Required]

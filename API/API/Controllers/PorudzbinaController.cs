@@ -30,7 +30,7 @@ namespace API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<PorudzbinaDto>>> GetPorudzbinas()
         {
             var spec = new PorudzbinaWithKupacSpecification();
@@ -50,7 +50,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("{porudzbinaId}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Kupac")]
         public async Task<ActionResult<PorudzbinaDto>> GetPorudzbinaById(Guid porudzbinaId)
         {
             var spec = new PorudzbinaWithKupacSpecification(porudzbinaId);
@@ -66,7 +66,7 @@ namespace API.Controllers
         [Consumes("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [AllowAnonymous]
+        [Authorize(Roles = "Kupac")]
         public async Task<ActionResult<PorudzbinaDto>> AddPorudzbina([FromBody] PorudzbinaCreationDto porudzbinaPost)
         {
             try
@@ -91,7 +91,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{porudzbinaId}")]
-       [AllowAnonymous]
+        [Authorize(Roles = "Kupac")]
 
         public async Task<IActionResult> DeletePorudzbina(Guid porudzbinaId)
         {
@@ -124,7 +124,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Roles = "Admin, Kupac")]
+        [Authorize(Roles = " Kupac")]
         public async Task<ActionResult<PorudzbinaDto>> UpdatePorudzbina([FromBody] PorudzbinaUpdateDto porudzbinaUpdate)
         {
             try
@@ -164,7 +164,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
 
-        [Authorize(Roles = "Admin, Kupac")]
+        [Authorize(Roles = " Kupac")]
         public async Task<ActionResult<List<PorudzbinaDto>>> GetPorudzbinasByKupacId(Guid KupacId)
         {
             var Porudzbinas = await _repository.GetPorudzbinasByKupacId(KupacId);

@@ -48,7 +48,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("{velicinaDresaId}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Kupac")]
         public async Task<ActionResult<VelicinaDresaDto>> GetVelicinaDresaById(Guid velicinaDresaId)
         {
             var spec = new VelicinaDresaWithDresSpecification(velicinaDresaId);
@@ -168,15 +168,8 @@ namespace API.Controllers
             if (velicine == null)
                 return NotFound(new ApiResponse(404, "Dres sa ID " + dresId + " ne postoji"));
 
-            List<VelicinaDresa> list = new List<VelicinaDresa>();
-            foreach (VelicinaDresa v in velicine)
-            {
-                if (v.Kolicina > 0)
-                {
-                    list.Add(v);
-                }
-            }
-            var velicineDto = _mapper.Map<IEnumerable<VelicinaDresa>, IEnumerable<VelicinaDresaDto>>(list);
+          
+            var velicineDto = _mapper.Map<IEnumerable<VelicinaDresa>, IEnumerable<VelicinaDresaDto>>(velicine);
             return Ok(velicineDto.ToList());
         }
     }
