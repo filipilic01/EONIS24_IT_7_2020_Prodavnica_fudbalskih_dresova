@@ -2,9 +2,10 @@
     <div class="row">
         <div class="col-8">
            <app-stepper [linearModeSelected]="false" #appStepper>
-            <cdk-step [label]="'Adresa'">
+            <cdk-step [label]="'Adresa'" [completed]="checkoutForm.get('addressForm')?.valid">
                 <app-checkout-address [checkoutForm]="checkoutForm"></app-checkout-address>
             </cdk-step>
+          
             <cdk-step [label]="'Pregled'">
                 <app-checkout-review></app-checkout-review>
             </cdk-step>
@@ -21,8 +22,16 @@
                 
                 <ul class="list-unstyled mb-4">
                     <li class="d-flex justify-content-between py-3 border-bottom">
+                        <strong class="text-muted">Iznos porudžbine: </strong>
+                        <strong>{{ price }} RSD</strong>
+                    </li>
+                    <li class="d-flex justify-content-between py-3 border-bottom">
+                        <strong class="text-muted">Troškovi dostave: </strong>
+                        <strong>300 RSD</strong>
+                    </li>
+                    <li class="d-flex justify-content-between py-3 border-bottom">
                         <strong class="text-muted">Ukupan iznos: </strong>
-                        <strong>{{price}} RSD</strong>
+                        <strong>{{ price + 300 }} RSD</strong>
                     </li>
                 </ul>
             </div>

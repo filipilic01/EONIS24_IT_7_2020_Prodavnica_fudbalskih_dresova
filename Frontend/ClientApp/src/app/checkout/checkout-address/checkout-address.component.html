@@ -1,6 +1,10 @@
 <div class="mt-4" *ngIf="checkoutForm" [formGroup]="checkoutForm">
     <div class="d-flex justify-content-between align-items-center">
         <h4>Shipping address</h4>
+        <button class="btn btn-outline-success mb-3" (click)="saveAddress()"
+        [disabled]="!checkoutForm.get('addressForm')?.valid || !checkoutForm.get('addressForm')?.dirty">
+            Sačuvaj adresu za buduća plaćanja
+        </button>
     </div>
     <div class="row" formGroupName="addressForm">
         <div class="form-group col-6 mb-4">
@@ -8,7 +12,7 @@
                 [class.is-valid]="checkoutForm.get('addressForm')?.get('firstName')?.valid" 
                 type="firstName"
                 formControlName="firstName" 
-                class="form-control is-invalid" id="floatingInput" placeholder="Ime">
+                class="form-control is-invalid" id="floatingInput1" placeholder="Ime">
                 
                 <div *ngIf="checkoutForm.get('addressForm')?.get('firstName')?.errors?.['required']" class="invalid-feedback">Unesite ime</div>
         </div>
@@ -17,7 +21,7 @@
                 [class.is-valid]="checkoutForm.get('addressForm')?.get('lastName')?.valid" 
                 type="lastName"
                 formControlName="lastName" 
-                class="form-control is-invalid" id="floatingInput" placeholder="Prezime">
+                class="form-control is-invalid" id="floatingInput2" placeholder="Prezime">
                 <div *ngIf="checkoutForm.get('addressForm')?.get('lastName')?.errors?.['required']" class="invalid-feedback">Unesite prezime</div>
         </div>
         <div class="form-group col-6 mb-4">
@@ -25,7 +29,7 @@
                 [class.is-valid]="checkoutForm.get('addressForm')?.get('street')?.valid" 
                 type="street"
                 formControlName="street" 
-                class="form-control is-invalid" id="floatingInput" placeholder="Ulica">
+                class="form-control is-invalid" id="floatingInput3" placeholder="Ulica">
                 <div *ngIf="checkoutForm.get('addressForm')?.get('street')?.errors?.['required']" class="invalid-feedback">Unesite ulicu</div>
         </div>
         <div class="form-group col-6 mb-4">
@@ -33,7 +37,7 @@
                 [class.is-valid]="checkoutForm.get('addressForm')?.get('streetNumber')?.valid" 
                 type="streetNumber"
                 formControlName="streetNumber" 
-                class="form-control is-invalid" id="floatingInput" placeholder="Broj">
+                class="form-control is-invalid" id="floatingInput4" placeholder="Broj">
                 <div *ngIf="checkoutForm.get('addressForm')?.get('streetNumber')?.errors?.['required']" class="invalid-feedback">Unesite broj ulice</div>
         </div>
         <div class="form-group col-6 mb-4">
@@ -41,7 +45,7 @@
                 [class.is-valid]="checkoutForm.get('addressForm')?.get('zipcode')?.valid" 
                 type="zipcode"
                 formControlName="zipcode" 
-                class="form-control is-invalid" id="floatingInput" placeholder="Poštanski broj">
+                class="form-control is-invalid" id="floatingInput5" placeholder="Poštanski broj">
                 <div *ngIf="checkoutForm.get('addressForm')?.get('zipcode')?.errors?.['required']" class="invalid-feedback">Unesite poštanski broj</div>
         </div>
         <div class="form-group col-6 mb-4">
@@ -49,17 +53,27 @@
                 [class.is-valid]="checkoutForm.get('addressForm')?.get('city')?.valid" 
                 type="city"
                 formControlName="city" 
-                class="form-control is-invalid" id="floatingInput" placeholder="Mesto">
+                class="form-control is-invalid" id="floatingInput6" placeholder="Mesto">
                 <div *ngIf="checkoutForm.get('addressForm')?.get('city')?.errors?.['required']" class="invalid-feedback">Unesite mesto</div>
         </div>
-        <div class="form-group col-6 mb-4 ">
+        <div class="form-group col-6 mb-4">
             <input [class.is-invalid]="checkoutForm.get('addressForm')?.get('phoneNumber')?.touched && checkoutForm.get('addressForm')?.get('phoneNumber')?.invalid"
                 [class.is-valid]="checkoutForm.get('addressForm')?.get('phoneNumber')?.valid" 
                 type="phoneNumber"
                 formControlName="phoneNumber" 
-                class="form-control is-invalid" id="floatingInput" placeholder="Broj telefona">
+                class="form-control is-invalid" id="floatingInput7" placeholder="Broj telefona">
                 <div *ngIf="checkoutForm.get('addressForm')?.get('phoneNumber')?.errors?.['required']" class="invalid-feedback">Unesite broj telefona</div>
         </div>
+       
     </div>
+</div>
+
+<div class="d-flex justify-content-between flex-row mb-5">
+    <button class="btn btn-outline-primary" routerLink="/cart">
+        <i class="fa fa-angle-left"></i> Nazad na korpu
+    </button>
+    <button class="btn btn-primary " cdkStepperNext>
+        Napred na dostavu <i class="fa fa-angle-right"></i>
+    </button>
 </div>
 

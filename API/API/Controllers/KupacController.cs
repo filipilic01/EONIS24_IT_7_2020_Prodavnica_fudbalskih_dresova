@@ -48,7 +48,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("{kupacId}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Kupac")]
         public async Task<ActionResult<KupacDto>> GetKupacById(Guid kupacId)
         {
 
@@ -137,13 +137,13 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Roles = "Admin, Kupac")]
+        // [Authorize(Roles = "Admin, Kupac")]
+        [AllowAnonymous]
         public async Task<ActionResult<KupacDto>> UpdateKupac([FromBody] KupacUpdateDto kupacUpdate)
         {
             try
             {
-                if (IsValidEmail(kupacUpdate.KupacEmail))
-                {
+                
                     var kupacEntity = await _repository.GetByIdAsync(kupacUpdate.KupacId);
 
                     if (kupacEntity == null)
@@ -164,10 +164,10 @@ namespace API.Controllers
                         existingKupac.KupacId = newKupac.KupacId;
                         existingKupac.KupacIme = newKupac.KupacIme;
                         existingKupac.KupacPrezime = newKupac.KupacPrezime;
-                        existingKupac.KupacKorisnickoIme = newKupac.KupacKorisnickoIme;
-                        existingKupac.KupacLozinka = BCrypt.Net.BCrypt.HashPassword(newKupac.KupacLozinka);
+                   
+                        
                         existingKupac.KupacBrojTelefona = newKupac.KupacBrojTelefona;
-                        existingKupac.KupacEmail = newKupac.KupacEmail;
+                     
                         existingKupac.KupacAdresa = newKupac.KupacAdresa;
 
                         return existingKupac;
@@ -175,11 +175,7 @@ namespace API.Controllers
 
                     var kupac_2 = await _repository.GetByIdAsync(kupacUpdate.KupacId);
                     return Ok(_mapper.Map<Kupac, KupacDto>(kupac_2));
-                }
-                else
-                {
-                    return BadRequest(new ApiResponse(400, "Nepravilan format mejla"));
-                }
+               
             }
              
             catch (Exception ex)

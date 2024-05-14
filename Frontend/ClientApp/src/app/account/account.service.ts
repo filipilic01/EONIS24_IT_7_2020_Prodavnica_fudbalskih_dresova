@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { User } from '../shared/models/user';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { KupacCreation, KupacNoPassword } from '../shared/models/kupac';
+import { KupacCreation, KupacNoPassword, KupacUpdate } from '../shared/models/kupac';
 import { AuthCreds } from '../shared/models/auth-creds';
 
 @Injectable({
@@ -64,11 +64,25 @@ export class AccountService {
     return this.http.post(this.baseUrl+ 'Kupac',kupac);
   }
 
+  updateKupac(kupac: KupacUpdate){
+    const token = localStorage.getItem('token');
+    let headers= new HttpHeaders();
+    headers = headers.set('Authorization', `Bearer ${token}`);
+    return this.http.put(this.baseUrl + 'Kupac', kupac, {headers})
+  }
+
   getKupci(){
     const token = localStorage.getItem('token');
     let headers= new HttpHeaders();
     headers = headers.set('Authorization', `Bearer ${token}`);
     return this.http.get<KupacNoPassword[]>(this.baseUrl+ 'Kupac',{headers} )
+  }
+
+  getKupac(){
+    const token = localStorage.getItem('token');
+    let headers= new HttpHeaders();
+    headers = headers.set('Authorization', `Bearer ${token}`);
+    return this.http.get<KupacNoPassword>(this.baseUrl+ 'Kupac/' + localStorage.getItem('userId'),{headers} )
   }
 
   logout(){

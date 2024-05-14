@@ -88,3 +88,25 @@ export class KupacNoPassword {
         this.kupacAdresa = kupacAdresa;
     }
 }
+
+export class KupacUpdate {
+    kupacId: string;
+    kupacIme: string;
+    kupacPrezime: string;
+    kupacBrojTelefona: string;
+    kupacAdresa: string;
+
+    constructor(
+        kupacId: string,
+        kupacIme: string,
+        kupacPrezime: string,
+        kupacBrojTelefona: string,
+        kupacAdresa: string
+    ) {
+        this.kupacId=kupacId;
+        this.kupacIme = kupacIme;
+        this.kupacPrezime = kupacPrezime;
+        this.kupacBrojTelefona = kupacBrojTelefona;
+        this.kupacAdresa = kupacAdresa;
+    }
+}

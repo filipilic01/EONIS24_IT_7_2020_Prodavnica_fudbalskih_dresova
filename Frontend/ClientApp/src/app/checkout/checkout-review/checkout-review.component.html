@@ -1,1 +1,43 @@
-<p>checkout-review works!</p>
+
+<div class="row">
+    <div class="col-md-8 offset-1">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Količina</th>
+                    <th></th>
+                    <th>Tim</th>
+                    <th>Sezona</th>
+                    <th>Tip</th>
+                    <th>Veličina</th>
+                    <th>Cena dresa</th>
+                    <th>Cena stavke</th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let stavka of stavke">
+                <tr>
+                    <td class="align-middle">{{stavka.brojStavki}}</td>
+                    <td class="align-middle"><img src="{{stavka.velicinaDresa.dres.slikaUrl}}" width="35px" height="35px" ></td>
+                    <td class="align-middle"><a routerLink="/shop/{{stavka.velicinaDresa.dres.dresId}}" class="text-decoration-none" style="color: black;">{{stavka.velicinaDresa.dres.tim}}</a></td>
+                    <td class="align-middle">{{stavka.velicinaDresa.dres.sezona}}</td>
+                    <td class="align-middle">{{stavka.velicinaDresa.dres.tip}}</td>
+                    <td class="align-middle">{{stavka.velicinaDresa.velicinaDresaVrednost}}</td>
+                    <td class="align-middle">{{formatPrice(stavka.velicinaDresa.dres.cena)}}<span> RSD</span></td>
+                    <td class="align-middle">{{formatPrice(stavka.brojStavki * stavka.velicinaDresa.dres.cena)}}<span> RSD</span></td>
+                    
+                </tr>
+            </tbody>
+           
+        </table>
+
+        
+    </div>
+</div>
+<div class="d-flex justify-content-between flex-row mb-5">
+    <button class="btn btn-outline-primary" cdkStepperPrevious>
+        <i class="fa fa-angle-left"></i> Nazad na dostavu
+    </button>
+    <button class="btn btn-primary " cdkStepperNext>
+        Napred na plaćanje <i class="fa fa-angle-right"></i>
+    </button>
+</div>
