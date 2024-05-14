@@ -20,8 +20,7 @@ export class RegisterComponent {
     username: new FormControl('', Validators.required),
     password: new FormControl('', [Validators.required, Validators.pattern(this.passwordComplexity)]),
     email: new FormControl('', [Validators.required, Validators.email]),
-    phoneNumber: new FormControl('', Validators.required),
-    address: new FormControl('', Validators.required)
+    
 
   })
 
@@ -38,10 +37,9 @@ export class RegisterComponent {
     const email = this.registerForm.get('email')!.value as string;
     const firstname = this.registerForm.get('firstname')!.value as string;
     const lastname = this.registerForm.get('lastname')!.value as string;
-    const phoneNumber = this.registerForm.get('phoneNumber')!.value as string;
-    const address = this.registerForm.get('address')!.value as string;
   
-    this.accountService.registerKupac(new KupacCreation(username,firstname,lastname,password,email,phoneNumber,address)).subscribe({
+  
+    this.accountService.registerKupac(new KupacCreation(username,firstname,lastname,password,email,'','')).subscribe({
       next: () => {
         // Prikaz tost poruke kada je registracija uspešna
         this.toast.success('Uspešno ste se registrovali!');

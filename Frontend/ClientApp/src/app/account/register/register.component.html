@@ -55,26 +55,7 @@
                 <div *ngIf="registerForm.get('password')?.errors?.['required']" class="invalid-feedback">Unesite lozinku</div>
                 <div *ngIf="registerForm.get('password')?.errors?.['pattern']" class="invalid-feedback">Lozinka nije dovoljno kompleksna</div>
             </div>
-            <div class="form-floating mb-3">
-                <input [class.is-invalid]="registerForm.get('phoneNumber')?.touched && registerForm.get('phoneNumber')?.invalid" 
-                [class.is-valid]="registerForm.get('phoneNumber')?.valid" 
-                type="phoneNumber"
-                formControlName="phoneNumber" 
-                class="form-control is-invalid" id="floatingInput" placeholder="Broj telefona">
-                <label for="floatingInput">Broj telefona</label>
-                <div *ngIf="registerForm.get('phoneNumber')?.errors?.['required']" class="invalid-feedback">Unesite broj telefona</div>
-               
-            </div>
-            <div class="form-floating mb-3">
-                <input [class.is-invalid]="registerForm.get('address')?.touched && registerForm.get('address')?.invalid" 
-                [class.is-valid]="registerForm.get('address')?.valid" 
-                type="address"
-                formControlName="address" 
-                class="form-control is-invalid" id="floatingInput" placeholder="Adresa">
-                <label for="floatingInput">Adresa</label>
-                <div *ngIf="registerForm.get('address')?.errors?.['required']" class="invalid-feedback">Unesite adresu</div>
-               
-            </div>
+            
             <ul class="text-danger list-unstyled">
                  <li *ngFor="let error of errors">
                     {{error}}

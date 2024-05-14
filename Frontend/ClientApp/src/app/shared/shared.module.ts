@@ -5,7 +5,9 @@ import { PagingHeaderComponent } from './paging-header/paging-header.component';
 import { PagerComponent } from './pager/pager.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BsDropdownModule} from 'ngx-bootstrap/dropdown';
-import { CarouselModule } from 'ngx-bootstrap/carousel'
+import { CarouselModule } from 'ngx-bootstrap/carousel';
+import { StepperComponent } from './components/stepper/stepper.component'
+import { CdkStepperModule } from '@angular/cdk/stepper'
 
 
 
@@ -15,14 +17,17 @@ import { CarouselModule } from 'ngx-bootstrap/carousel'
 @NgModule({
   declarations: [
     PagingHeaderComponent,
-    PagerComponent
+    PagerComponent,
+    StepperComponent
   ],
   imports: [
     CommonModule,
     PaginationModule.forRoot(),
     ReactiveFormsModule,
     BsDropdownModule.forRoot(),
-    CarouselModule.forRoot()
+    CarouselModule.forRoot(),
+    CdkStepperModule
+    
   ],
   exports: [
     PaginationModule,
@@ -30,7 +35,9 @@ import { CarouselModule } from 'ngx-bootstrap/carousel'
     PagerComponent,
     ReactiveFormsModule,
     BsDropdownModule,
-    CarouselModule
+    CarouselModule,
+    StepperComponent,
+    CdkStepperModule
   ]
 })
 export class SharedModule { }
