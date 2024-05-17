@@ -16,6 +16,13 @@ baseUrl = environment.apiUrl
 
   constructor(private http: HttpClient) { }
 
+  createPaymentIntent(){
+    const token = localStorage.getItem('token');
+    let headers= new HttpHeaders();
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    return this.http.post(this.baseUrl+'Payment/' + localStorage.getItem('porudzbina'), {}, {headers});
+  }
+
   createStavkaPorudzbine(stavkaPorudzbina: StavkaPorudzbineCreation): Observable<any> {
     const token = localStorage.getItem('token');
     let headers= new HttpHeaders();

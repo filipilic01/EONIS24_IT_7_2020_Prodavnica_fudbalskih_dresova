@@ -75,15 +75,17 @@ total = 0
   }
   }
 
-  toCheckout(){
+  toCheckout() {
     const porudzbina = localStorage.getItem('porudzbina');
     if (porudzbina !== null) {
-      this.cartService.updatePorudzbina(new PorudzbinaUpdate(porudzbina, this.total, "2024-05-13T16:41:03.476Z")).subscribe(res=>{
-        this.router.navigateByUrl('/checkout');
+      const now = new Date(); 
+      const isoString = now.toISOString(); 
+      this.cartService.updatePorudzbina(new PorudzbinaUpdate(porudzbina, this.total+300,"0001-01-01T00:00:00",isoString, false)).subscribe(res=>{
+        this.router.navigate(['/checkout'], { queryParams: { from: 'toCheckout' } });
       })
     }
-    
   }
+  
 
   
 }

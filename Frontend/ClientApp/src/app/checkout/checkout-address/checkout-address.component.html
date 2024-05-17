@@ -72,8 +72,8 @@
     <button class="btn btn-outline-primary" routerLink="/cart">
         <i class="fa fa-angle-left"></i> Nazad na korpu
     </button>
-    <button class="btn btn-primary " cdkStepperNext>
-        Napred na dostavu <i class="fa fa-angle-right"></i>
+    <button [disabled]="checkoutForm?.get('addressForm')?.invalid" class="btn btn-primary " cdkStepperNext>
+        Napred na pregled <i class="fa fa-angle-right"></i>
     </button>
 </div>
 

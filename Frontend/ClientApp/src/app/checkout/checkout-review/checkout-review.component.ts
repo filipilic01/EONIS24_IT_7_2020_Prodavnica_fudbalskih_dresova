@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { CdkStepper } from '@angular/cdk/stepper';
+import { Component, OnInit, Input } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { CartService } from 'src/app/cart/cart.service';
 import { StavkaPorudzbine } from 'src/app/shared/models/stavka-porudzbine';
 import { ShopService } from 'src/app/shop/shop.service';
@@ -9,12 +11,24 @@ import { ShopService } from 'src/app/shop/shop.service';
   styleUrls: ['./checkout-review.component.scss']
 })
 export class CheckoutReviewComponent implements OnInit {
+@Input() appStepper?: CdkStepper
+
   stavke: StavkaPorudzbine[] = []
   total = 0
-    constructor(private cartService: CartService, private shopService: ShopService){
+    constructor(private cartService: CartService, private shopService: ShopService, private toastr: ToastrService){
   
     }
 
+    createPaymentIntent() {
+      this.cartService.createPaymentIntent().subscribe({
+        next: () => {
+          
+          this.appStepper?.next();
+        },
+        error: error => this.toastr.error(error.message)
+        
+      })
+    }
     
   ngOnInit(): void {
     const porudzbinaId = localStorage.getItem('porudzbina') ?? '';

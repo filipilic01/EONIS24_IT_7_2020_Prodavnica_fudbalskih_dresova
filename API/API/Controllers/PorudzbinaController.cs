@@ -55,6 +55,7 @@ namespace API.Controllers
         {
             var spec = new PorudzbinaWithKupacSpecification(porudzbinaId);
             var porudzbina = await _repository.GetEntityWithSpec(spec);
+            
 
             if (porudzbina == null)
                 return NotFound(new ApiResponse(404, "Porudzbina sa ID " + porudzbinaId + " ne postoji"));
@@ -67,6 +68,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Authorize(Roles = "Kupac")]
+        
         public async Task<ActionResult<PorudzbinaDto>> AddPorudzbina([FromBody] PorudzbinaCreationDto porudzbinaPost)
         {
             try
@@ -142,7 +144,9 @@ namespace API.Controllers
                 var updatePorudzbina = await _repository.UpdateAsync(porudzbina, porudzbinaEntity, (existingPorudzbina, newPorudzbina) =>
                 {
                     existingPorudzbina.PorudzbinaId = newPorudzbina.PorudzbinaId;
-                    existingPorudzbina.DatumPorudzbine = newPorudzbina.DatumPorudzbine;
+                    existingPorudzbina.DatumKreiranja = newPorudzbina.DatumKreiranja;
+                    existingPorudzbina.DatumAzuriranja = newPorudzbina.DatumAzuriranja;
+                    existingPorudzbina.Placena = newPorudzbina.Placena;
                     existingPorudzbina.UkupanIznos = newPorudzbina.UkupanIznos;
 
 

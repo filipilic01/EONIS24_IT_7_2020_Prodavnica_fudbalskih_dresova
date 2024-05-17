@@ -3,37 +3,55 @@ import { Kupac } from "./kupac";
 export class Porudzbina {
     porudzbinaId: string;
     ukupanIznos: number;
-    datumPorudzbine: string | null;
+    datumKreiranja: string | null;
+    datumAzuriranja: string | null;
     kupac: Kupac;
+    placena: boolean
     kupacId: string;
+    paymentIntentId: string | null;
+    clientSecret: string | null;
 
     constructor(
         porudzbinaId: string,
         ukupanIznos: number,
-        datumPorudzbine: string | null,
+        datumKreiranja: string | null,
+        datumAzuriranja: string | null,
         kupac: Kupac,
-        kupacId: string
+        placena: boolean,
+        kupacId: string,
+        paymentIntentId: string | null,
+        clientSecret: string | null
     ) {
         this.porudzbinaId = porudzbinaId;
         this.ukupanIznos = ukupanIznos;
-        this.datumPorudzbine = datumPorudzbine;
+        this.datumAzuriranja = datumAzuriranja;
+        this.datumKreiranja= datumKreiranja;
         this.kupac = kupac;
+        this.placena=placena;
         this.kupacId = kupacId;
+        this.paymentIntentId=paymentIntentId;
+        this.clientSecret = clientSecret;
     }
 }
 
 export class PorudzbinaCreation {
     ukupanIznos: number;
-    datumPorudzbine: string | null;
+    datumKreiranja: string | null;
+    datumAzuriranja: string | null;
+    placena: boolean;
     kupacId: string;
 
     constructor(
         ukupanIznos: number,
-        datumPorudzbine: string | null,
+        datumKreiranja: string | null,
+        datumAzuriranja: string | null,
+        placena: boolean,
         kupacId: string
     ) {
         this.ukupanIznos = ukupanIznos;
-        this.datumPorudzbine = datumPorudzbine;
+        this.datumKreiranja = datumKreiranja;
+        this.datumAzuriranja = datumAzuriranja;
+        this.placena = placena;
         this.kupacId = kupacId;
     }
 }
@@ -42,18 +60,24 @@ export class PorudzbinaCreation {
 export class PorudzbinaUpdate {
     porudzbinaId: string;
     ukupanIznos: number;
-    datumPorudzbine: string | null;
+    datumKreiranja: string | null;
+    datumAzuriranja: string | null;
+    placena: boolean;
     
 
     constructor(
         porudzbinaId: string,
         ukupanIznos: number,
-        datumPorudzbine: string | null,
+        datumKreiranja: string | null,
+        datumAzuriranja: string | null,
+        placena: boolean
        
     ) {
         this.porudzbinaId=porudzbinaId
         this.ukupanIznos = ukupanIznos;
-        this.datumPorudzbine = datumPorudzbine;
+        this.datumAzuriranja = datumAzuriranja;
+        this.datumKreiranja=datumKreiranja;
+        this.placena = placena;
        
     }
 }

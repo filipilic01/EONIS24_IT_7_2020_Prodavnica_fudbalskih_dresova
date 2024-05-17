@@ -17,6 +17,8 @@ namespace API.Helpers
 
             CreateMap<PorudzbinaUpdateDto, Porudzbina>();
 
+            CreateMap<Porudzbina, PorudzbinaPaymentDto>();
+
         }
     }
 }

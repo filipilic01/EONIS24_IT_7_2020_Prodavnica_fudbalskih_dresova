@@ -1,10 +1,12 @@
-﻿using Core.Entities;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace API.Dtos.Porudzbina
+namespace Core.Entities
 {
-    public class PorudzbinaDto
+    public class PorudzbinaPaymentDto
     {
         public Guid PorudzbinaId { get; set; }
         public double UkupanIznos { get; set; }

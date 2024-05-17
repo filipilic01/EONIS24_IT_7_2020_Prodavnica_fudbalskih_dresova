@@ -151,7 +151,7 @@ constructor
       else{
         if(porudzbinaId === ''){
         
-          this.cartService.createPorudzbina(new PorudzbinaCreation(0,"0001-01-01T00:00:00",kupacId)).subscribe(res => {
+          this.cartService.createPorudzbina(new PorudzbinaCreation(0,"0001-01-01T00:00:00","0001-01-01T00:00:00",false, kupacId)).subscribe(res => {
           
           localStorage.setItem('porudzbina', res.porudzbinaId ?? '');
           const selectedPorudzbinaId = localStorage.getItem('porudzbina') ?? '';

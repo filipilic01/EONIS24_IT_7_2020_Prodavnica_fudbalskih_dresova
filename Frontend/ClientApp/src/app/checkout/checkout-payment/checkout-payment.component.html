@@ -1,10 +1,43 @@
-<p>checkout-payment works!</p>
+<div class="mt-4" *ngIf="checkoutForm" [formGroup]="checkoutForm">
+    <div class="row mb-3">
+        <div class="form-group col-12" formGroupName="paymentForm">
+            <input [class.is-invalid]="checkoutForm.get('paymentForm')?.get('nameOnCard')?.touched && checkoutForm.get('paymentForm')?.get('nameOnCard')?.invalid"
+            [class.is-valid]="checkoutForm.get('paymentForm')?.get('nameOnCard')?.valid" 
+            type="nameOnCard"
+            formControlName="nameOnCard" 
+            class="form-control is-invalid" id="floatingInput2" placeholder="Prezime">
+            <div *ngIf="checkoutForm.get('paymentForm')?.get('nameOnCard')?.errors?.['required']" class="invalid-feedback">Unesite ime na kartici</div>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-6">
+            <div class="form-floating">
+                <div class="form-control" #cardNumber></div>
+                <label>Broj kartice</label>
+                <span class="text-danger">{{cardErrors}}</span>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="form-floating">
+                <div class="form-control" #cardExpiry></div>
+                <label>Važi do</label>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="form-floating">
+                <div class="form-control" #cardCvc></div>
+                <label>CVC/VCC</label>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="d-flex justify-content-between flex-row mb-5">
     <button class="btn btn-outline-primary" cdkStepperPrevious>
         <i class="fa fa-angle-left"></i> Nazad na pregled
     </button>
-    <button class="btn btn-primary " >
+    <button [disabled]="!paymentFormComplete" class="btn btn-primary " (click)="submitOrder()">
         Potvrdi porudžbinu <i class="fa fa-angle-right"></i>
+        
     </button>
 </div>

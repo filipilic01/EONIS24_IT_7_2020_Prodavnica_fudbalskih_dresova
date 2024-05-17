@@ -35,9 +35,9 @@
 </div>
 <div class="d-flex justify-content-between flex-row mb-5">
     <button class="btn btn-outline-primary" cdkStepperPrevious>
-        <i class="fa fa-angle-left"></i> Nazad na dostavu
+        <i class="fa fa-angle-left"></i> Nazad na adresu
     </button>
-    <button class="btn btn-primary " cdkStepperNext>
+    <button (click)="createPaymentIntent()" class="btn btn-primary " cdkStepperNext>
         Napred na plaćanje <i class="fa fa-angle-right"></i>
     </button>
 </div>
