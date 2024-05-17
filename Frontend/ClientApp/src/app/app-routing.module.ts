@@ -9,6 +9,7 @@ import { NotFoundComponent } from './core/not-found/not-found.component';
 import { CartComponent } from './cart/cart/cart.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { CheckoutGuard } from './core/guards/checkout.guard';
+import { DresGuard } from './core/guards/dres.guard';
 
 
 const routes: Routes = [
@@ -18,6 +19,7 @@ const routes: Routes = [
   {path: 'not-found', component:NotFoundComponent},
   {path: 'admin',canActivate:[AuthGuard], loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),data: { breadcrumb: 'Admin' }},
   {path: 'shop', loadChildren: () => import('./shop/shop.module').then(m => m.ShopModule),data: {breadcrumb: 'Shop'}},
+  {path: 'orders', loadChildren: () => import('./orders/orders.module').then(m => m.OrdersModule),data: {breadcrumb: 'Porudžbine'}},
   {path: 'checkout',canActivate:[AuthGuard, CheckoutGuard], loadChildren: () => import('./checkout/checkout.module').then(m => m.CheckoutModule),data: {breadcrumb: 'Checkout'}},
   {path: 'cart', canActivate:[AuthGuard], loadChildren: () => import('./cart/cart.module').then(m => m.CartModule),data: {breadcrumb: 'Korpa'}},
   {path: 'account', loadChildren: () => import('./account/account.module').then(m => m.AccountModule),data: {breadcrumb: 'Nalog'}},

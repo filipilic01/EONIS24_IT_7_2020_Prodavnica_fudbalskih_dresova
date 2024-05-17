@@ -28,7 +28,7 @@ constructor(private shopService: ShopService){
   }
 
   getDresovi() {
-    this.shopService.getDresovi(this.seasonSelected, this.typeSelected, this.sortSelected,this.pageSize, this.pageIndex,this.search).subscribe({
+    this.shopService.getDresovi(false,this.seasonSelected, this.typeSelected, this.sortSelected,this.pageSize, this.pageIndex,this.search).subscribe({
       next: response => {
         this.dresovi = response.data
         this.pageSize = response.pageSize

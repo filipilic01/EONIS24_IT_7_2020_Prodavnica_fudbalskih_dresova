@@ -14,14 +14,14 @@ export class ShopService {
 
   constructor(private http: HttpClient) { }
 
-  getDresovi(season: string, type: string, sort: string, pageSize: number, pageIndex: number, search: string) {
+  getDresovi(obrisan:boolean, season: string, type: string, sort: string, pageSize: number, pageIndex: number, search: string) {
     
     if(search){
       return this.http.get<Pagination<Dres[]>>(this.baseUrl + 'Dres?PageIndex=' + pageIndex +
-    '&PageSize=' + pageSize + '&Sezona=' + season + '&Tip=' + type + '&Sort=' + sort + '&Search=' +search);  
+    '&PageSize=' + pageSize + '&Sezona=' + season + '&Tip=' + type + '&Obrisan=' + obrisan + '&Sort=' + sort + '&Search=' +search);  
     }
     return this.http.get<Pagination<Dres[]>>(this.baseUrl + 'Dres?PageIndex=' + pageIndex +
-    '&PageSize=' + pageSize + '&Sezona=' + season + '&Tip=' + type + '&Sort=' + sort);
+    '&PageSize=' + pageSize + '&Sezona=' + season + '&Tip=' +  type + '&Obrisan=' + obrisan + '&Sort=' + sort);
   }
 
   getDres(id: string){

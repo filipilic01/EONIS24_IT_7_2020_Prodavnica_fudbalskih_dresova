@@ -1,0 +1,41 @@
+<div class="modal-header">
+    <h4 class="modal-title">Izbriši kupca</h4>
+  
+</div>
+<div class="modal-body">
+    <form (ngSubmit)="closeModal()">
+        <div class="form-group mb-2">
+            <label for="ime">Ime:</label>
+            <input type="text" class="form-control" id="ime" name="ime" [(ngModel)]="kupacIme"
+            disabled>
+        </div>
+        <div class="form-group mb-2">
+            <label for="prezime">Prezime:</label>
+            <input type="text" class="form-control" id="prezime" name="prezime" [(ngModel)]="kupacPrezime" disabled>
+        </div>
+        <div class="form-group mb-2">
+            <label for="korisnickoIme">Korisničko ime:</label>
+            <input type="text" class="form-control" id="korisnickoIme" name="korisnickoIme" [(ngModel)]="kupacKorisnickoIme" disabled>
+        </div>
+        <div class="form-group mb-2 ">
+            <label for="email">Email:</label>
+            <input type="text" class="form-control" id="email" name="email" [(ngModel)]="kupacEmail" disabled>
+        </div>
+        <div  class="form-group mb-2">
+            <label for="broj">Broj telefona:</label>
+            <input type="text" class="form-control" id="broj" name="broj" [(ngModel)]="kupacBrojTelefona" disabled>
+        </div>
+        <div class="form-group mb-2">
+            <label for="adresa">Adresa:</label>
+            <input type="text" class="form-control" id="adresa" name="adresa" [(ngModel)]="kupacAdresa" disabled>
+        </div>
+        
+        <div class="form-group">
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+ 
+    <button  type="submit"  class="btn btn-primary" (click)="deleteKupac()">Obriši</button>
+    <button type="button" class="btn btn-secondary" (click)="closeModal()">Zatvori</button>
+</div>

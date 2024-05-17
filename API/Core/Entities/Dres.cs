@@ -34,6 +34,9 @@ namespace Core.Entities
         
         public string SlikaUrl { get; set; }
 
+        
+        public bool Obrisan { get; set; }
+
         [Required]
         [StringLength(10)]
         public string Tip { get; set; }

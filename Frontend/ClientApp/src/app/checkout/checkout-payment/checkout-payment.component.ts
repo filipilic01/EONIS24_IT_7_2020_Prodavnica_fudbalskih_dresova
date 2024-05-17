@@ -88,11 +88,12 @@ submitOrder(){
           }).then(result => {
             console.log(result);
             if (result.paymentIntent){
-              
+              const id = localStorage.getItem('porudzbina')
               localStorage.removeItem('porudzbina')
             this.cartService.brojStavki=0
             
-            this.router.navigateByUrl('/checkout/success');
+            this.router.navigate(['/checkout/success'], { queryParams: { yourParam: id } });
+
              
             }
             else{

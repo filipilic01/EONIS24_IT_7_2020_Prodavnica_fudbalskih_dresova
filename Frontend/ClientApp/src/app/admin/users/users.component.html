@@ -1,6 +1,6 @@
 <div class="container" style="margin-top:25px ;">
     <div class="row">
-        <div class="col-md-4" *ngFor="let user of users">
+        <div class="col-md-4 mb-4" *ngFor="let user of users; let i = index">
             <div class="card card-profile">
                 <div class="card-avatar " style="text-align: center;">
                     
@@ -14,8 +14,16 @@
                     <h4 class="card-title">{{user.kupacEmail}}</h4>
                     <h4 class="card-title">{{user.kupacBrojTelefona}}</h4>
                     <h4 class="card-title">{{user.kupacAdresa}}</h4>
+                    <h4 *ngIf="aktivni[i]== 0" class="card-title">Status: <span class="text-danger">NEAKTIVAN </span></h4>
+                    <h4 *ngIf="aktivni[i]!= 0" class="card-title">Status: <span class="text-success">AKTIVAN </span></h4>
                 </div>
+                <div *ngIf="aktivni[i]== 0" style="position: absolute; top: 0; right: 0">
+                    <button (click)="deleteKupac(user)" class="btn btn-outline-danger" ><i class="fa fa-trash-o"></i></button>
+                </div>
+                
             </div>
         </div>
     </div>
+    
+
   </div>

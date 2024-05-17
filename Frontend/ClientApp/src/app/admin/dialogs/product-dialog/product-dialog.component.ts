@@ -18,7 +18,8 @@ export class ProductDialogComponent implements OnInit {
   tim: string | undefined;
    sezona: string | undefined;
    brend: string | undefined;
-   cena: number | undefined
+   cena: number | undefined;
+   obrisan: boolean | undefined
    slikaUrl: string | undefined
    tip: string | undefined
    zemlja: string | undefined
@@ -124,7 +125,7 @@ export class ProductDialogComponent implements OnInit {
 
     if(this.flag === 1){
       if (this.imeIgraca && this.tim && this.sezona && this.brend && this.cena && this.slikaUrl && this.tip && this.zemlja && this.takmicenje && this.status && this.timUrl && this.adminId && this.XS !== undefined && this.S !== undefined && this.L !== undefined && this.M !== undefined && this.XL !== undefined && this.XXL !== undefined && this.XXXL !== undefined) {
-        this.shopService.addDres(new DresCreation(this.imeIgraca, this.tim, this.sezona, this.brend, this.cena, this.slikaUrl, this.tip, this.zemlja, this.takmicenje, this.status, this.timUrl, this.adminId)).subscribe(res => {
+        this.shopService.addDres(new DresCreation(this.imeIgraca, this.tim, this.sezona, this.brend, this.cena, this.slikaUrl, this.tip, false, this.zemlja, this.takmicenje, this.status, this.timUrl, this.adminId)).subscribe(res => {
           this.dresCreated = res;
           console.log(this.dresCreated)
           if (this.dresCreated.dresId) {
@@ -165,7 +166,7 @@ export class ProductDialogComponent implements OnInit {
          this.status && this.timUrl && this.XS !== undefined && this.S !== undefined && this.L !== undefined 
          && this.M !== undefined &&  this.XL !== undefined && this.XXL !== undefined && this.XXXL !== undefined 
          ) {
-        this.shopService.updateDres(new DresUpdate(this.dresId, this.imeIgraca, this.tim, this.sezona, this.brend, this.cena, this.slikaUrl, this.tip, this.zemlja, this.takmicenje, this.status, this.timUrl)).subscribe(res => {
+        this.shopService.updateDres(new DresUpdate(this.dresId, this.imeIgraca, this.tim, this.sezona, this.brend, this.cena, this.slikaUrl, this.tip,false, this.zemlja, this.takmicenje, this.status, this.timUrl)).subscribe(res => {
           this.dresCreated = res;
           console.log(this.dresCreated)
           if (this.dresCreated.dresId) {
@@ -202,9 +203,16 @@ export class ProductDialogComponent implements OnInit {
   }
 
   deleteModal(){
-    if(this.dresId){
-      this.shopService.deleteDres(this.dresId).subscribe(res=>{
-        this.toastr.success('Uspešno obrisan dres');
+    if(this.dresId && this.imeIgraca && this.tim && this.sezona && this.brend
+      && this.cena && this.slikaUrl && this.tip && this.zemlja && this.takmicenje && 
+      this.status && this.timUrl && this.XS !== undefined && this.S !== undefined && this.L !== undefined 
+      && this.M !== undefined &&  this.XL !== undefined && this.XXL !== undefined && this.XXXL !== undefined 
+      ){
+      this.shopService.updateDres(new DresUpdate(this.dresId, this.imeIgraca, this.tim, this.sezona, this.brend, this.cena, this.slikaUrl, this.tip,true, this.zemlja, this.takmicenje, this.status, this.timUrl)).subscribe(res => {
+        this.dresCreated=res
+        this.toastr.success("Uspešno obrisan dres!");
+
+        this.ngOnInit()
         this.bsModalRef.hide();
       })
     }

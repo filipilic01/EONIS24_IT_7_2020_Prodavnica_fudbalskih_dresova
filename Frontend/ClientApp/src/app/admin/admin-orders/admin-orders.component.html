@@ -1,0 +1,34 @@
+
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <table class="table table-hover" style="cursor: pointer;">
+            <thead>
+                <tr>
+                   
+                    <th>Porudžbina ID</th>
+                    <th>Datum kreiranja</th>
+                    <th>Ukupan iznos</th>
+                    <th>Kupac</th>
+                 
+                </tr>
+            </thead>
+            <tbody *ngFor="let porudzbina of porudzbine">
+                <tr>
+                    
+                    <td class="align-middle">{{porudzbina.porudzbinaId}}</td>
+                    <td class="align-middle">{{porudzbina.datumKreiranja | date: 'medium'}}</td>
+                    <td class="align-middle">{{porudzbina.ukupanIznos}} RSD</td>
+                    <td class="align-middle">{{porudzbina.kupac}}</td>
+                   
+                   
+                  
+                </tr>
+            </tbody>
+        
+        </table>
+
+        
+    </div>
+</div>
+
+

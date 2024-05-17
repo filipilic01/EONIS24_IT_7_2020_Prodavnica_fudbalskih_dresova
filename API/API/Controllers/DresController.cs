@@ -146,6 +146,7 @@ namespace API.Controllers
                     existingDres.Cena = newDres.Cena;
                     existingDres.SlikaUrl = newDres.SlikaUrl;
                     existingDres.Tip = newDres.Tip;
+                    existingDres.Obrisan = newDres.Obrisan;
                     existingDres.Zemlja = newDres.Zemlja;
                     existingDres.Takmicenje = newDres.Takmicenje;
                     existingDres.Status = newDres.Status;

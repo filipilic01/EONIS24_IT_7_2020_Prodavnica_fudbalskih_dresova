@@ -9,6 +9,8 @@
         public double Cena { get; set; }
         public string SlikaUrl { get; set; }
         public string Tip { get; set; }
+
+        public bool Obrisan { get; set; }
         public string Zemlja { get; set; }
         public string Takmicenje { get; set; }
         public string Status { get; set; }

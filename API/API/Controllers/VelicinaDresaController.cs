@@ -70,6 +70,10 @@ namespace API.Controllers
             try
             {
                 VelicinaDresa velicinaDresaEntity = _mapper.Map<VelicinaDresa>(velicinaDresaPost);
+                if (velicinaDresaEntity.Kolicina < 0)
+                {
+                    return Forbid ("Kolicina ne sme biti manje od 0");
+                }
                 velicinaDresaEntity.VelicinaDresaId = Guid.NewGuid();
 
                 await _repository.AddAsync(velicinaDresaEntity);

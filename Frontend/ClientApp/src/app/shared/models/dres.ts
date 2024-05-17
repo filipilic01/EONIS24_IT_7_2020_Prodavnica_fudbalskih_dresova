@@ -9,6 +9,7 @@ export class Dres {
          cena: number
          slikaUrl: string
          tip: string
+         obrisan: boolean
          zemlja: string
          takmicenje: string
          status: string
@@ -18,7 +19,7 @@ export class Dres {
         
          
          constructor(dresId: string, imeIgraca: string, tim:string, sezona: string, brend: string, cena: number, slikaUrl: string, tip: string,
-            zemlja: string, takmicenje: string, status: string, timUrl: string, admin: Admin, adminId: string){
+            obrisan: boolean, zemlja: string, takmicenje: string, status: string, timUrl: string, admin: Admin, adminId: string){
                 this.dresId=dresId
                 this.imeIgraca=imeIgraca;
                 this.tim=tim;
@@ -27,6 +28,7 @@ export class Dres {
                 this.cena=cena;
                 this.slikaUrl=slikaUrl;
                 this.tip=tip
+                this.obrisan=obrisan
                 this.zemlja=zemlja;
                 this.takmicenje=takmicenje;
                 this.status=status;
@@ -50,6 +52,7 @@ export class DresCreation {
       cena: number
       slikaUrl: string
       tip: string
+      obrisan: boolean
       zemlja: string
       takmicenje: string
       status: string
@@ -58,7 +61,7 @@ export class DresCreation {
      
       
       constructor( imeIgraca: string, tim:string, sezona: string, brend: string, cena: number, slikaUrl: string, tip: string,
-         zemlja: string, takmicenje: string, status: string, timUrl: string, adminId: string){
+        obrisan: boolean, zemlja: string, takmicenje: string, status: string, timUrl: string, adminId: string){
        
              this.imeIgraca=imeIgraca;
              this.tim=tim;
@@ -66,7 +69,8 @@ export class DresCreation {
              this.brend=brend;
              this.cena=cena;
              this.slikaUrl=slikaUrl;
-             this.tip=tip
+             this.tip=tip;
+             this.obrisan= obrisan;
              this.zemlja=zemlja;
              this.takmicenje=takmicenje;
              this.status=status;
@@ -88,6 +92,7 @@ export class DresUpdate {
      cena: number
      slikaUrl: string
      tip: string
+     obrisan: boolean
      zemlja: string
      takmicenje: string
      status: string
@@ -96,7 +101,7 @@ export class DresUpdate {
     
      
      constructor(dresId:string, imeIgraca: string, tim:string, sezona: string, brend: string, cena: number, slikaUrl: string, tip: string,
-        zemlja: string, takmicenje: string, status: string, timUrl: string){
+        obrisan: boolean, zemlja: string, takmicenje: string, status: string, timUrl: string){
             this.dresId=dresId
             this.imeIgraca=imeIgraca;
             this.tim=tim;
@@ -104,7 +109,8 @@ export class DresUpdate {
             this.brend=brend;
             this.cena=cena;
             this.slikaUrl=slikaUrl;
-            this.tip=tip
+            this.tip=tip;
+            this.obrisan = obrisan;
             this.zemlja=zemlja;
             this.takmicenje=takmicenje;
             this.status=status;

@@ -85,6 +85,12 @@ export class AccountService {
     return this.http.get<KupacNoPassword>(this.baseUrl+ 'Kupac/' + localStorage.getItem('userId'),{headers} )
   }
 
+  deleteKupac(id: string){
+    const token = localStorage.getItem('token');
+    let headers= new HttpHeaders();
+    headers = headers.set('Authorization', `Bearer ${token}`);
+    return this.http.delete(this.baseUrl+ 'Kupac/' +id,{headers} )
+  }
   logout(){
     localStorage.removeItem('token');
     localStorage.removeItem('expiresOn');

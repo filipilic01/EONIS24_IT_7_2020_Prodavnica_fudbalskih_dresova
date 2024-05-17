@@ -22,6 +22,8 @@ namespace Core.Specifications
         public string? Tim { get; set; }
         public string? Sezona { get; set; }
         public string? Takmicenje { get; set; }
+
+        public bool? Obrisan { get; set; }
         public string? Player { get; set; }
         public string? Sort { get; set; }
 

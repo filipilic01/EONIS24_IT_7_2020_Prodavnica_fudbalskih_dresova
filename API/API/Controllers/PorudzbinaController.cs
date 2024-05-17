@@ -42,7 +42,16 @@ namespace API.Controllers
                 return NoContent();
             }
 
-            var porudzbinasDto = _mapper.Map<IEnumerable<Porudzbina>, IEnumerable<PorudzbinaDto>>(porudzbinas);
+            List<Porudzbina> porudzbine = new List<Porudzbina>();
+            foreach (var por in porudzbinas)
+            {
+                if(por.Placena == true){
+                    porudzbine.Add(por);
+                }
+                
+            }
+
+            var porudzbinasDto = _mapper.Map<IEnumerable<Porudzbina>, IEnumerable<PorudzbinaDto>>(porudzbine);
             return Ok(porudzbinasDto.ToList());
 
         }
@@ -55,6 +64,8 @@ namespace API.Controllers
         {
             var spec = new PorudzbinaWithKupacSpecification(porudzbinaId);
             var porudzbina = await _repository.GetEntityWithSpec(spec);
+
+           
             
 
             if (porudzbina == null)
@@ -171,13 +182,55 @@ namespace API.Controllers
         [Authorize(Roles = " Kupac")]
         public async Task<ActionResult<List<PorudzbinaDto>>> GetPorudzbinasByKupacId(Guid KupacId)
         {
-            var Porudzbinas = await _repository.GetPorudzbinasByKupacId(KupacId);
+            var porudzbinas = await _repository.GetPorudzbinasByKupacId(KupacId);
 
-            if (Porudzbinas.Count==0)
+            if (porudzbinas==null)
                 return NotFound(new ApiResponse(404, "Kupac with ID " + KupacId + " not found"));
 
-            var PorudzbinasDto = _mapper.Map<IEnumerable<Porudzbina>, IEnumerable<PorudzbinaDto>>(Porudzbinas);
-            return Ok(PorudzbinasDto.ToList());
+
+            List<Porudzbina> porudzbine = new List<Porudzbina>();
+            foreach (var por in porudzbinas)
+            {
+                if (por.Placena == true)
+                {
+                    porudzbine.Add(por);
+                }
+
+            }
+
+            var porudzbinasDto = _mapper.Map<IEnumerable<Porudzbina>, IEnumerable<PorudzbinaDto>>(porudzbine);
+            return Ok(porudzbinasDto.ToList());
+        }
+
+        [HttpGet("Broj/{KupacBrojId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<int>> GetBrojPorudzbinaByKupacId(string KupacBrojId)
+        {
+            var kupac = _repository.GetKupacByKorisnickoIme(KupacBrojId);
+
+            var porudzbinas = await _repository.GetPorudzbinasByKupacId(kupac.KupacId);
+
+            if (porudzbinas.Count == 0)
+                return Ok(0);
+
+
+            List<Porudzbina> porudzbine = new List<Porudzbina>();
+            foreach (var por in porudzbinas)
+            {
+                if (por.Placena == true && por.DatumKreiranja.HasValue && por.DatumKreiranja.Value >= DateTime.Now.AddDays(-1))
+                {
+                    porudzbine.Add(por);
+                }
+
+
+            }
+
+
+            return Ok(porudzbine.Count);
         }
     }
 }

@@ -60,6 +60,7 @@ export class KupacCreation {
 }
 
 export class KupacNoPassword {
+    kupacId: string;
     kupacKorisnickoIme: string;
     kupacIme: string;
     kupacPrezime: string;
@@ -69,7 +70,7 @@ export class KupacNoPassword {
     kupacAdresa: string;
 
     constructor(
-
+        kupacId: string,
         kupacKorisnickoIme: string,
         kupacIme: string,
         kupacPrezime: string,
@@ -78,7 +79,7 @@ export class KupacNoPassword {
         kupacBrojTelefona: string,
         kupacAdresa: string
     ) {
-
+        this.kupacId= kupacId
         this.kupacKorisnickoIme = kupacKorisnickoIme;
         this.kupacIme = kupacIme;
         this.kupacPrezime = kupacPrezime;

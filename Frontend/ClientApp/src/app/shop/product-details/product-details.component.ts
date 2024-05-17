@@ -10,6 +10,7 @@ import { StavkaPorudzbine, StavkaPorudzbineCreation, StavkaPorudzbineUpdate } fr
 
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { provideCloudflareLoader } from '@angular/common';
+import { AccountService } from 'src/app/account/account.service';
 
 @Component({
   selector: 'app-product-details',
@@ -32,6 +33,7 @@ currentId = ''
 
 constructor
 (private shopService: ShopService, 
+public accountService: AccountService,
  private activatedRoute: ActivatedRoute,
  private toastr: ToastrService,
  private cartService: CartService,

@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { UsersComponent } from './users/users.component';
 import { ProductsComponent } from './products/products.component';
-import { OrdersComponent } from './orders/orders.component';
+import { AdminOrdersComponent } from './admin-orders/admin-orders.component';
 
 const routes: Routes= [
   {path:'users', component:UsersComponent, data: {breadcrumb: 'Korisnici'}},
   {path: 'products', component: ProductsComponent, data: {breadcrumb: 'Dresovi'}},
-  {path: 'orders', component: OrdersComponent, data: {breadcrumb: 'Porudžbine'}}
+  {path: 'admin-orders', component: AdminOrdersComponent, data: {breadcrumb: 'Porudžbine'}}
 ]
 
 

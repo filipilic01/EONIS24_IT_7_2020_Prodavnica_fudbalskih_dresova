@@ -5,6 +5,7 @@ import { Porudzbina, PorudzbinaCreation, PorudzbinaUpdate } from '../shared/mode
 import { tap, map } from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { StavkaPorudzbine, StavkaPorudzbineCreation, StavkaPorudzbineUpdate } from '../shared/models/stavka-porudzbine';
+import { Kupac, KupacNoPassword } from '../shared/models/kupac';
 
 @Injectable({
   providedIn: 'root'
@@ -61,7 +62,7 @@ getPorudzbine(){
   const token = localStorage.getItem('token');
   let headers= new HttpHeaders();
     headers = headers.set('Authorization', `Bearer ${token}`);
-  return this.http.get(this.baseUrl + 'Porudzbina', {headers});
+  return this.http.get<Porudzbina[]>(this.baseUrl + 'Porudzbina', {headers});
 }
 
 getPorudzbina(){
@@ -70,6 +71,29 @@ getPorudzbina(){
   let headers= new HttpHeaders();
     headers = headers.set('Authorization', `Bearer ${token}`);
   return this.http.get<Porudzbina>(this.baseUrl + 'Porudzbina/'+id, {headers});
+}
+
+getPorudzbinaId(id: string){
+  const token = localStorage.getItem('token');
+  let headers= new HttpHeaders();
+    headers = headers.set('Authorization', `Bearer ${token}`);
+  return this.http.get<Porudzbina>(this.baseUrl + 'Porudzbina/'+id, {headers});
+}
+
+getPorudzbineByKupacId(){
+  const id = localStorage.getItem('userId');
+  const token = localStorage.getItem('token');
+  let headers= new HttpHeaders();
+    headers = headers.set('Authorization', `Bearer ${token}`);
+  return this.http.get<Porudzbina[]>(this.baseUrl + 'Porudzbina/Kupac/'+id, {headers});
+}
+
+getBrojPorudzbinaByKupac(user: KupacNoPassword){
+  
+  const token = localStorage.getItem('token');
+  let headers= new HttpHeaders();
+  headers = headers.set('Authorization', `Bearer ${token}`);
+  return this.http.get<number>(this.baseUrl + 'Porudzbina/Broj/'+user.kupacKorisnickoIme, {headers});
 }
 
 deletePorudzbina(){
@@ -96,6 +120,12 @@ getStavkeByPorudzbinaId() {
       return stavke; 
     })
   );
+}
+getStavkePorudzbineByPorudzbinaId(id: string) {
+  const token = localStorage.getItem('token');
+  let headers= new HttpHeaders();
+    headers = headers.set('Authorization', `Bearer ${token}`);
+  return this.http.get<StavkaPorudzbine[]>(this.baseUrl + 'StavkaPorudzbine/Porudzbina/' + id, {headers});
 }
 
 updatePorudzbina(porudzbina: PorudzbinaUpdate){

@@ -87,9 +87,16 @@
                         </select>
                         
                     </div>
-                    <div class="col-md-6">
-                        <button class="btn btn-outline-success" (click)="addItemToCart()">Dodaj u korpu</button>
-                    </div>
+                    <ng-container *ngIf="(accountService.currentUser$ | async) as user">
+                        <div *ngIf="!user || user.role !== 'Admin'" class="col-md-6">
+                            <button class="btn btn-outline-success" (click)="addItemToCart()">Dodaj u korpu</button>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="(accountService.currentUser$ | async) === null">
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-success" (click)="addItemToCart()">Dodaj u korpu</button>
+                        </div>
+                    </ng-container>
                     
                 </div>
                 
