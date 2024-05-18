@@ -18,11 +18,13 @@ namespace API.Controllers
     public class KupacController : ControllerBase
     {
         private readonly IGenericRepository<Kupac> _repository;
+        private readonly IGenericRepository<Admin> _adminRepository;
         private readonly IMapper _mapper;
 
-        public KupacController(IGenericRepository<Kupac> repository, IMapper mapper)
+        public KupacController(IGenericRepository<Kupac> repository, IGenericRepository<Admin> adminRepository, IMapper mapper)
         {
             _repository = repository;
+            _adminRepository = adminRepository;
             _mapper = mapper;
         }
 
@@ -72,7 +74,8 @@ namespace API.Controllers
                 if (IsValidEmail(KupacPost.KupacEmail))
                 {
                     var existingKupacKorisnickoIme = _repository.GetKorisnickoIme(KupacPost.KupacKorisnickoIme, "Kupac");
-                    if (existingKupacKorisnickoIme.Equals(true))
+                    var existingAdminKorisnickoIme = _repository.GetKorisnickoIme(KupacPost.KupacKorisnickoIme, "Admin");
+                    if (existingKupacKorisnickoIme.Equals(true) || existingAdminKorisnickoIme.Equals(true))
                         return BadRequest(new ApiResponse(400, "Korisničko ime " + KupacPost.KupacKorisnickoIme + " već postoji!"));
                     var existingKupacEmail = _repository.GetEmail(KupacPost.KupacEmail, "Kupac");
                     if (existingKupacEmail.Equals(true))

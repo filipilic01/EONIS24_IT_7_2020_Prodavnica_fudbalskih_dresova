@@ -8,8 +8,11 @@
                 <option value="CenaAsc">Cena: Od najniže ka najviše</option>
             </select>
             <h5 class="text-warning ms-3">Sezone</h5>
-            <select  id="seasonSelect" class="form-select mb-4" (change)="onSeasonSelected($event)">
+            <select  id="seasonSelect" class="form-select mb-4" (change)="onSeasonSelected($event)" size="10">
                 <option selected value="">Sve sezone</option>
+                <option value="1987/88">1987/88</option>
+                <option value="1988/89">1988/89</option>
+                <option value="1989/90">1989/90</option>
                 <option value="1990/91">1990/91</option>
                 <option value="1991/92">1991/92</option>
                 <option value="1992/93">1992/93</option>
@@ -44,6 +47,7 @@
                 <option value="2021/22">2021/22</option>
                 <option value="2022/23">2022/23</option>
                 <option value="2023/24">2023/24</option>
+                <option value="2024/25">2024/25</option>
             </select>
             <h5 class="text-warning ms-3">Tip</h5>
             <select id="typeSelect" class="form-select mb-4" (change)="onTypeSelected($event)">

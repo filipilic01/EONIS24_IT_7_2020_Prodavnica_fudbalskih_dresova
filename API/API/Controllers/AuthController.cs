@@ -33,7 +33,7 @@ namespace API.Controllers
 
             if (admin == null && kupac == null)
             {
-                return NotFound(new ApiResponse(404, "User nije pronadjen"));
+                return BadRequest(new ApiResponse(400, "Korisničko ime nije ispravno"));
             }
 
             if (admin != null)
@@ -54,7 +54,7 @@ namespace API.Controllers
             {
                 if (!BCrypt.Net.BCrypt.Verify(authCreds.Lozinka, kupac.KupacLozinka))
                 {
-                    return Unauthorized(new ApiResponse(401, "Invalid Lozinka"));
+                    return Unauthorized(new ApiResponse(401, "Pogrešna lozinka"));
                 }
                 else
                 {

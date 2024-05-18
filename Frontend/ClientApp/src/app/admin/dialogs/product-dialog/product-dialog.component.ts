@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { Dres, DresCreation, DresUpdate } from 'src/app/shared/models/dres';
@@ -11,6 +12,8 @@ import { ShopService } from 'src/app/shop/shop.service';
   styleUrls: ['./product-dialog.component.scss']
 })
 export class ProductDialogComponent implements OnInit {
+
+  options: number[] = Array.from({length: 100}, (_, i) => i);
   slike: string[]=[]
   dresCreated?: Dres
   dresId: string | undefined;
@@ -125,7 +128,11 @@ export class ProductDialogComponent implements OnInit {
 
     if(this.flag === 1){
       if (this.imeIgraca && this.tim && this.sezona && this.brend && this.cena && this.slikaUrl && this.tip && this.zemlja && this.takmicenje && this.status && this.timUrl && this.adminId && this.XS !== undefined && this.S !== undefined && this.L !== undefined && this.M !== undefined && this.XL !== undefined && this.XXL !== undefined && this.XXXL !== undefined) {
-        this.shopService.addDres(new DresCreation(this.imeIgraca, this.tim, this.sezona, this.brend, this.cena, this.slikaUrl, this.tip, false, this.zemlja, this.takmicenje, this.status, this.timUrl, this.adminId)).subscribe(res => {
+        if(this.cena < 0){
+          this.toastr.error("Cena mora biti veca od 0");
+        }
+        else{
+           this.shopService.addDres(new DresCreation(this.imeIgraca, this.tim, this.sezona, this.brend, this.cena, this.slikaUrl, this.tip, false, this.zemlja, this.takmicenje, this.status, this.timUrl, this.adminId)).subscribe(res => {
           this.dresCreated = res;
           console.log(this.dresCreated)
           if (this.dresCreated.dresId) {
@@ -155,6 +162,9 @@ export class ProductDialogComponent implements OnInit {
             })
           }
         });
+        }
+        
+       
       } else {
         this.toastr.error('Neki od obaveznih podataka nisu uneti.');
       }
@@ -166,7 +176,11 @@ export class ProductDialogComponent implements OnInit {
          this.status && this.timUrl && this.XS !== undefined && this.S !== undefined && this.L !== undefined 
          && this.M !== undefined &&  this.XL !== undefined && this.XXL !== undefined && this.XXXL !== undefined 
          ) {
-        this.shopService.updateDres(new DresUpdate(this.dresId, this.imeIgraca, this.tim, this.sezona, this.brend, this.cena, this.slikaUrl, this.tip,false, this.zemlja, this.takmicenje, this.status, this.timUrl)).subscribe(res => {
+          if(this.cena<0){
+            this.toastr.error("Cena ne sme biti manja od 0")
+          }
+          else{
+            this.shopService.updateDres(new DresUpdate(this.dresId, this.imeIgraca, this.tim, this.sezona, this.brend, this.cena, this.slikaUrl, this.tip,false, this.zemlja, this.takmicenje, this.status, this.timUrl)).subscribe(res => {
           this.dresCreated = res;
           console.log(this.dresCreated)
           if (this.dresCreated.dresId) {
@@ -196,6 +210,8 @@ export class ProductDialogComponent implements OnInit {
             })
           }
         });
+          }
+        
       } else {
         this.toastr.error('Neki od obaveznih podataka nisu uneti.');
       }

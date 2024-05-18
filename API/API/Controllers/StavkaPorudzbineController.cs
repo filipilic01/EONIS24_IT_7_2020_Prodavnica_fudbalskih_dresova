@@ -163,7 +163,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
 
-        [Authorize(Roles = "Kupac")]
+        [Authorize(Roles = "Admin, Kupac")]
         public async Task<ActionResult<List<StavkaPorudzbineDto>>> GetStavkaPorudzbinesByPorudzbinaId(Guid porudzbinaId)
         {
             var stavkaPorudzbines = await _repository.GetStavkaPorudzbineByPorudzbinaId(porudzbinaId);

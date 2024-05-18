@@ -14,6 +14,9 @@ import { OrdersRoutingModule } from './orders-routing-module';
   imports: [
     CommonModule,
     OrdersRoutingModule
+  ],
+  exports:[
+    
   ]
 })
 export class OrdersModule { }

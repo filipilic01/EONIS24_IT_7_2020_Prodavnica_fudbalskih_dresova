@@ -13,9 +13,20 @@ porudzbine: Porudzbina[] =[]
 constructor(private cartService: CartService){}
 
 ngOnInit(): void {
-  this.cartService.getPorudzbineByKupacId().subscribe(res=>{
+  if(localStorage.getItem('role')=== 'Admin'){
+    this.cartService.getPorudzbine().subscribe(res=>{
+    this.porudzbine=res
+    })
+  }
+  else if(localStorage.getItem('role')=== 'Kupac'){
+    this.cartService.getPorudzbineByKupacId().subscribe(res=>{
     this.porudzbine= res;
   
   })
+  }
+  else{
+    console.log('d')
+  }
+  
 }
 }

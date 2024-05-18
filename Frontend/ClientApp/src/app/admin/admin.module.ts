@@ -11,6 +11,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { AdminOrdersComponent } from './admin-orders/admin-orders.component';
 import { UsersDialogComponent } from './dialogs/users-dialog/users-dialog.component';
+import { AdminOrderDetailsComponent } from './admin-order-details/admin-order-details.component';
+import { OrdersModule } from '../orders/orders.module';
 
 
 
@@ -22,13 +24,15 @@ import { UsersDialogComponent } from './dialogs/users-dialog/users-dialog.compon
 
     ProductDialogComponent,
      AdminOrdersComponent,
-     UsersDialogComponent
+     UsersDialogComponent,
+     AdminOrderDetailsComponent
   ],
   imports: [
     CommonModule,
     AdminRoutingModule,
     FormsModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+
   ],
   exports: [
     FormsModule

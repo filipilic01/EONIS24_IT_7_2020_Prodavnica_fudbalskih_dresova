@@ -12,7 +12,7 @@
                  
                 </tr>
             </thead>
-            <tbody *ngFor="let porudzbina of porudzbine">
+            <tbody *ngFor="let porudzbina of porudzbine"  routerLink="/admin-orders/{{porudzbina.porudzbinaId}}">
                 <tr>
                     
                     <td class="align-middle">{{porudzbina.porudzbinaId}}</td>

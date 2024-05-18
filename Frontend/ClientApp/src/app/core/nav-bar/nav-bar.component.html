@@ -19,7 +19,7 @@
         </ng-container>
         <ng-container *ngIf="accountService.currentUser$ | async as user">
             <div class="dropdown ms-3 me-5" *ngIf="user.role === 'Kupac';" style="cursor: pointer;" dropdown>
-                <a dropdownToggle class="dropdown-toggle">
+                <a dropdownToggle class="dropdown-toggle custom-dropdown-toggle">
                     <strong>{{user.korisnickoIme}}</strong>
                 </a>
                 <ul  *dropdownMenu class="dropdown-menu dropdown-menu-right">
@@ -45,8 +45,8 @@
         </ng-container>
         <ng-container *ngIf="accountService.currentUser$ | async as user">
             <div class="dropdown ms-3 me-5" *ngIf="user.role === 'Admin';" style="cursor: pointer;" dropdown>
-                <a dropdownToggle class="dropdown-toggle">
-                    <strong>{{user.korisnickoIme}}</strong>
+                <a dropdownToggle class="dropdown-toggle custom-dropdown-toggle">
+                    {{user.korisnickoIme}}
                 </a>
                 <ul  *dropdownMenu class="dropdown-menu dropdown-menu-right">
                     <li class="py-1">
@@ -60,7 +60,7 @@
                         </a>
                     </li>
                     <li class="py-1">
-                        <a *ngIf="user.role === 'Admin';" class="dropdown-item" routerLink="/admin/admin-orders">
+                        <a *ngIf="user.role === 'Admin';" class="dropdown-item" routerLink="/orders">
                             <i class="fa fa-history me-3"> Sve porudžbine</i>
                         </a>
                     </li>

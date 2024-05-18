@@ -70,6 +70,7 @@ public accountService: AccountService,
               console.log(this.slike); 
           }
         }
+      
       },
       error: error => console.log(error)
     })
