@@ -26,22 +26,29 @@ namespace Infrastructure.Data
         {
             return await _context.Set<T>().ToListAsync();
         }
-
         public async Task<T> GetByIdAsync(Guid id)
         {
             return await _context.Set<T>().FindAsync(id);
         }
-
         public async Task DeleteAsync(Guid id)
         {
             var enitityForDelete = await _context.Set<T>().FindAsync(id);
-            
-            
             _context.Set<T>().Remove(enitityForDelete);
-            
             await _context.SaveChangesAsync();
         }
-
+        public async Task<T> AddAsync(T add)
+        {
+            var Dres = await _context.Set<T>().AddAsync(add);
+            await _context.SaveChangesAsync();
+            return Dres.Entity;
+        }
+        public async Task<T> UpdateAsync(T updateRequest, T existingDres, Func<T, T, T> update)
+        {
+            var updatedEntity = update(existingDres, updateRequest);
+            _context.Entry(existingDres).CurrentValues.SetValues(updatedEntity);
+            await _context.SaveChangesAsync();
+            return updatedEntity;
+        }
         public async Task<T> GetEntityWithSpec(ISpecification<T> spec)
         {
             return await ApplySpecification(spec).FirstOrDefaultAsync();
@@ -57,21 +64,7 @@ namespace Infrastructure.Data
             return await ApplySpecification(spec).CountAsync();
         }
 
-        public async Task<T> AddAsync(T add)
-        {
-            var Dres = await _context.Set<T>().AddAsync(add);
-            await _context.SaveChangesAsync();
-            return Dres.Entity;
-        }
-
-        public async Task<T> UpdateAsync(T updateRequest, T existingDres, Func<T, T, T> update)
-        {
-           
-            var updatedEntity = update(existingDres, updateRequest);
-            _context.Entry(existingDres).CurrentValues.SetValues(updatedEntity);
-            await _context.SaveChangesAsync();
-            return updatedEntity;
-        }
+   
 
         public bool GetKorisnickoIme(string KorisnickoIme, string flag)
         {

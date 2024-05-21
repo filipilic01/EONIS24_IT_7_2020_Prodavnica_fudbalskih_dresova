@@ -34,26 +34,20 @@ namespace API.Controllers
         public async Task<ActionResult<List<PorudzbinaDto>>> GetPorudzbinas()
         {
             var spec = new PorudzbinaWithKupacSpecification();
-
             var porudzbinas = await _repository.ListAsync(spec);
-
             if (porudzbinas == null || porudzbinas.Count == 0)
             {
                 return NoContent();
             }
-
             List<Porudzbina> porudzbine = new List<Porudzbina>();
             foreach (var por in porudzbinas)
             {
                 if(por.Placena == true){
                     porudzbine.Add(por);
                 }
-                
             }
-
             var porudzbinasDto = _mapper.Map<IEnumerable<Porudzbina>, IEnumerable<PorudzbinaDto>>(porudzbine);
             return Ok(porudzbinasDto.ToList());
-
         }
 
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -64,13 +58,8 @@ namespace API.Controllers
         {
             var spec = new PorudzbinaWithKupacSpecification(porudzbinaId);
             var porudzbina = await _repository.GetEntityWithSpec(spec);
-
-           
-            
-
             if (porudzbina == null)
                 return NotFound(new ApiResponse(404, "Porudzbina sa ID " + porudzbinaId + " ne postoji"));
-
             return _mapper.Map<Porudzbina, PorudzbinaDto>(porudzbina);
         }
 
@@ -86,7 +75,6 @@ namespace API.Controllers
             {
                 Porudzbina porudzbinaEntity = _mapper.Map<Porudzbina>(porudzbinaPost);
                 porudzbinaEntity.PorudzbinaId = Guid.NewGuid();
-
                 await _repository.AddAsync(porudzbinaEntity);
                 var spec = new PorudzbinaWithKupacSpecification(porudzbinaEntity.PorudzbinaId);
                 var porudzbina = await _repository.GetEntityWithSpec(spec);
@@ -96,8 +84,6 @@ namespace API.Controllers
             {
                 return StatusCode(500, new ApiException(500, "Greska prilikom kreiranja porudzbine"));
             }
-
-
         }
 
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -111,25 +97,17 @@ namespace API.Controllers
             try
             {
                 var Porudzbina = await _repository.GetByIdAsync(porudzbinaId);
-
                 if (Porudzbina == null)
                 {
-
                     return NotFound(new ApiResponse(404, "Porudzbina sa ID " + porudzbinaId + " ne postoji"));
                 }
-
                 await _repository.DeleteAsync(porudzbinaId);
-
-
                 return NoContent();
             }
             catch (Exception ex)
             {
-
                 return StatusCode(500, new ApiException(500, "Greska prilikom brisanja porudzbine"));
             }
-
-
         }
 
         [HttpPut]
@@ -143,15 +121,11 @@ namespace API.Controllers
             try
             {
                 var porudzbinaEntity = await _repository.GetByIdAsync(porudzbinaUpdate.PorudzbinaId);
-
                 if (porudzbinaEntity == null)
                 {
-
                     return NotFound(new ApiResponse(404, "Porudzbina sa " + porudzbinaUpdate.PorudzbinaId + " ne postoji"));
                 }
-
                 Porudzbina porudzbina = _mapper.Map<Porudzbina>(porudzbinaUpdate);
-
                 var updatePorudzbina = await _repository.UpdateAsync(porudzbina, porudzbinaEntity, (existingPorudzbina, newPorudzbina) =>
                 {
                     existingPorudzbina.PorudzbinaId = newPorudzbina.PorudzbinaId;
@@ -159,8 +133,6 @@ namespace API.Controllers
                     existingPorudzbina.DatumAzuriranja = newPorudzbina.DatumAzuriranja;
                     existingPorudzbina.Placena = newPorudzbina.Placena;
                     existingPorudzbina.UkupanIznos = newPorudzbina.UkupanIznos;
-
-
                     return existingPorudzbina;
                 });
                 var spec = new PorudzbinaWithKupacSpecification(porudzbina.PorudzbinaId);
@@ -171,7 +143,6 @@ namespace API.Controllers
             {
                 return StatusCode(500, new ApiException(500, "Greska prilikom editovanja porudzbine"));
             }
-
         }
 
         [HttpGet("Kupac/{KupacId}")]

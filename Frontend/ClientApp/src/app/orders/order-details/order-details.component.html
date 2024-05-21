@@ -43,7 +43,7 @@
             <ul class="list-unstyled mb-4">
                 <li class="d-flex justify-content-between py-3 border-bottom">
                     <strong class="text-muted">Iznos porudžbine: </strong>
-                    <strong>{{ porudzbina?.ukupanIznos }} RSD</strong>
+                    <strong>{{ (porudzbina?.ukupanIznos ?? 0) - 300 }} RSD</strong>
                 </li>
                 <li class="d-flex justify-content-between py-3 border-bottom">
                     <strong class="text-muted">Troškovi dostave: </strong>

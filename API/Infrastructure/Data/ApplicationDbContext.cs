@@ -20,7 +20,6 @@ namespace Infrastructure.Data
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Kupac> Kupacs { get; set; }
         public DbSet<Dres> Dress { get; set; }
-
         public DbSet<VelicinaDresa> VelicinaDresas { get; set; }
         public DbSet<Porudzbina> Porudzbinas { get; set; }
         public DbSet<StavkaPorudzbine> StavkaPorudzbines { get; set; }
